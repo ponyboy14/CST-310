@@ -40,7 +40,37 @@ void init()
 }
 
 
-
+void plot_rect(float xmax, float xmin, float ymax, float ymin, float zmax, float zmin) {
+    glVertex3f(xmin,ymax,zmax);
+    glVertex3f(xmin,ymin,zmax);
+    glVertex3f(xmax,ymin,zmax);
+    glVertex3f(xmax,ymax,zmax);
+    //back
+    glVertex3f(xmax,ymax,zmin);
+    glVertex3f(xmax,ymin,zmin);
+    glVertex3f(xmin,ymin,zmin);
+    glVertex3f(xmin,ymax,zmin);
+    //right
+    glVertex3f(xmax,ymax,zmax);
+    glVertex3f(xmax,ymin,zmax);
+    glVertex3f(xmax,ymin,zmin);
+    glVertex3f(xmax,ymax,zmin);
+    //left
+    glVertex3f(xmin,ymax,zmin);
+    glVertex3f(xmin,ymin,zmin);
+    glVertex3f(xmin,ymin,zmax);
+    glVertex3f(xmin,ymax,zmax);
+    //top
+    glVertex3f(xmin,ymax,zmin);
+    glVertex3f(xmin,ymax,zmax);
+    glVertex3f(xmax,ymax,zmax);
+    glVertex3f(xmax,ymax,zmin);
+    //bottom
+    glVertex3f(xmin,ymin,zmin);
+    glVertex3f(xmin,ymin,zmax);
+    glVertex3f(xmax,ymin,zmax);
+    glVertex3f(xmax,ymin,zmin);	
+}
 
 
 
@@ -115,42 +145,8 @@ void display()
 	
 	//Cube1	
 	glBegin(GL_QUADS);
-	//front
     glColor3f(1.0,0.0,0.0);
-    glVertex3f(-0.5,0.5,0.5);
-    glVertex3f(-0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,0.5);
-    glVertex3f(0.5,0.5,0.5);
-    //back
-    glColor3f(0.0,1.0,0.0);
-    glVertex3f(0.5,0.5,-0.5);
-    glVertex3f(0.5,-1.0,-0.5);
-    glVertex3f(-0.5,-1.0,-0.5);
-    glVertex3f(-0.5,0.5,-0.5);
-    //right
-    glColor3f(0.0,0.0,1.0);
-    glVertex3f(0.5,0.5,0.5);
-    glVertex3f(0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,-0.5);
-    glVertex3f(0.5,0.5,-0.5);
-    //left
-    glColor3f(1.0,1.0,0.0);
-    glVertex3f(-0.5,0.5,-0.5);
-    glVertex3f(-0.5,-1.0,-0.5);
-    glVertex3f(-0.5,-1.0,0.5);
-    glVertex3f(-0.5,0.5,0.5);
-    //top
-    glColor3f(0.0,1.0,1.0);
-    glVertex3f(-0.5,0.5,-0.5);
-    glVertex3f(-0.5,0.5,0.5);
-    glVertex3f(0.5,0.5,0.5);
-    glVertex3f(0.5,0.5,-0.5);
-    //bottom
-    glColor3f(1.0,0.0,1.0);
-    glVertex3f(-0.5,-1.0,-0.5);
-    glVertex3f(-0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,-0.5);
+    plot_rect(0.5,-0.5,0.5,-1.0,0.5,-0.5);
    
     glEnd();
     
@@ -162,50 +158,42 @@ void display()
     glBegin(GL_QUADS);
 	//front
     glColor3f(1.0,0.0,0.0);
-    glVertex3f(-0.5,0.5,0.5);
-    glVertex3f(-0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,0.5);
-    glVertex3f(0.5,0.5,0.5);
-    //back
-    glColor3f(0.0,1.0,0.0);
-    glVertex3f(0.5,0.5,-0.5);
-    glVertex3f(0.5,-1.0,-0.5);
-    glVertex3f(-0.5,-1.0,-0.5);
-    glVertex3f(-0.5,0.5,-0.5);
-    //right
-    glColor3f(0.0,0.0,1.0);
-    glVertex3f(0.5,0.5,0.5);
-    glVertex3f(0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,-0.5);
-    glVertex3f(0.5,0.5,-0.5);
-    //left
-    glColor3f(1.0,1.0,0.0);
-    glVertex3f(-0.5,0.5,-0.5);
-    glVertex3f(-0.5,-1.0,-0.5);
-    glVertex3f(-0.5,-1.0,0.5);
-    glVertex3f(-0.5,0.5,0.5);
-    //top
-    glColor3f(0.0,1.0,1.0);
-    glVertex3f(-0.5,0.5,-0.5);
-    glVertex3f(-0.5,0.5,0.5);
-    glVertex3f(0.5,0.5,0.5);
-    glVertex3f(0.5,0.5,-0.5);
-    //bottom
-    glColor3f(1.0,0.0,1.0);
-    glVertex3f(-0.5,-1.0,-0.5);
-    glVertex3f(-0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,0.5);
-    glVertex3f(0.5,-1.0,-0.5);
-   
+    plot_rect(0.5,-0.5,0.5,-1.0,0.5,-0.5);
     glEnd();
     
    
+    glTranslatef(2.9,0.0,0.0);
     
     
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,0.0);
+    plot_rect(2.1,-2.1,-0.25,-0.75,0.5,-0.5);
+    glEnd();
     
+    glBegin(GL_QUADS);
+    glColor3f(0.1,0.1,0.1);
+    plot_rect(2.3,2.1,0.6,-0.75,0.5,-0.5);
+    glEnd();
     
+    glBegin(GL_QUADS);
+    glColor3f(0.1,0.1,0.1);
+    plot_rect(-2.1,-2.3,0.6,-0.75,0.5,-0.5);
+    glEnd();
     
+    glBegin(GL_QUADS);
+    glColor3f(0.05,0.05,0.05);
+    plot_rect(2.3,-2.3,0.6,-0.75,-0.2,-0.5);
+    glEnd();
     
+    glBegin(GL_QUADS);
+    glColor3f(0.5,0.5,0.5);
+    plot_rect(1.9,1.8,-0.75,-1.0,0.45,0.35);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glColor3f(0.5,0.5,0.5);
+    plot_rect(-1.8,-1.9,-0.75,-1.0,0.45,0.35);
+    glEnd();
     
     
     
@@ -357,6 +345,3 @@ void timer(int)
 	glutPostRedisplay();
 	glutTimerFunc(1000/60,timer,0);
 }
-
-
-
