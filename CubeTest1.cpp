@@ -7,6 +7,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 
 // Camera position
@@ -40,32 +42,38 @@ void init()
 }
 
 
-void plot_rect(float xmax, float xmin, float ymax, float ymin, float zmax, float zmin) {
+void plot_rect(float xmax, float xmin, float ymax, float ymin, float zmax, float zmin, float colors[][3]) {
+    glColor3f(colors[0][0], colors[0][1], colors[0][2]);
     glVertex3f(xmin,ymax,zmax);
     glVertex3f(xmin,ymin,zmax);
     glVertex3f(xmax,ymin,zmax);
     glVertex3f(xmax,ymax,zmax);
     //back
+    glColor3f(colors[1][0], colors[1][1], colors[1][2]);
     glVertex3f(xmax,ymax,zmin);
     glVertex3f(xmax,ymin,zmin);
     glVertex3f(xmin,ymin,zmin);
     glVertex3f(xmin,ymax,zmin);
     //right
+    glColor3f(colors[2][0], colors[2][1], colors[2][2]);
     glVertex3f(xmax,ymax,zmax);
     glVertex3f(xmax,ymin,zmax);
     glVertex3f(xmax,ymin,zmin);
     glVertex3f(xmax,ymax,zmin);
     //left
+    glColor3f(colors[3][0], colors[3][1], colors[3][2]);
     glVertex3f(xmin,ymax,zmin);
     glVertex3f(xmin,ymin,zmin);
     glVertex3f(xmin,ymin,zmax);
     glVertex3f(xmin,ymax,zmax);
     //top
+    glColor3f(colors[4][0], colors[4][1], colors[4][2]);
     glVertex3f(xmin,ymax,zmin);
     glVertex3f(xmin,ymax,zmax);
     glVertex3f(xmax,ymax,zmax);
     glVertex3f(xmax,ymax,zmin);
     //bottom
+    glColor3f(colors[5][0], colors[5][1], colors[5][2]);
     glVertex3f(xmin,ymin,zmin);
     glVertex3f(xmin,ymin,zmax);
     glVertex3f(xmax,ymin,zmax);
@@ -80,9 +88,9 @@ int state =1;
 
 void draw_cylinder(GLfloat radius,
                    GLfloat height,
-                   GLubyte R,
-                   GLubyte G,
-                   GLubyte B)
+                   GLfloat R,
+                   GLfloat G,
+                   GLfloat B)
 {
     GLfloat x              = 0.0;
     GLfloat y              = 0.0;
@@ -90,7 +98,7 @@ void draw_cylinder(GLfloat radius,
     GLfloat angle_stepsize = 0.1;
 
     /** Draw the tube */
-    glColor3ub(R-10,G,B);
+    glColor3f(R-0.10,G,B);
     glBegin(GL_QUAD_STRIP);
     angle = 0.0;
         while( angle < 2*PI ) {
@@ -105,7 +113,7 @@ void draw_cylinder(GLfloat radius,
     glEnd();
 
     /** Draw the circle on top of cylinder */
-    glColor3ub(R,G,B);
+    glColor3f(R,G,B);
     glBegin(GL_POLYGON);
     angle = 0.0;
         while( angle < 2*PI ) {
@@ -118,6 +126,50 @@ void draw_cylinder(GLfloat radius,
     glEnd();
 }
 
+
+void drawLamp()
+{
+
+
+	//neck of lamp
+	glTranslatef(2.78,1.0,-0.2);
+	glRotatef(90.0,1.0,0.0,0.0);
+    draw_cylinder(0.09,0.4,0.38,0.36,.35);
+    
+    //Lamp Shade
+    glRotatef(-90.0,1.0,0.0,0.0);
+    glTranslatef(0.0,0.5,0.0);
+    glRotatef(90.0,1.0,0.0,0.0);
+    draw_cylinder(0.4,0.65,0.98,0.86,0.75);
+    
+    
+    //Lamp top
+    glRotatef(-90.0,1.0,0.0,0.0);
+    glTranslatef(0.0,0.07,0.0);
+    glRotatef(90.0,1.0,0.0,0.0);
+    draw_cylinder(0.04,0.03,0.3,0.3,0.3);
+    
+    
+    
+     //cone upright
+     glRotatef(-90.0,1.0,0.0,0.0);
+    glPushMatrix();
+   glColor3f(0.38,0.36,0.35);
+  glTranslatef(0.0, -1.35, 0.0);
+  glRotatef(270.0, 1.0, 0.0, 0.0);
+  glutSolidCone(0.26, 0.735, 70, 12);
+  glPopMatrix();
+  
+  
+  //cone upside down
+    glPushMatrix();
+   glColor3f(0.32,0.33,0.32);
+  glTranslatef(0.0, -1.35, 0.0);
+  glRotatef(450.0, 1.0, 0.0, 0.0);
+  glutSolidCone(0.26, 0.7, 70, 12);
+  glPopMatrix();
+	
+}
 
 
 void display()
@@ -134,6 +186,8 @@ void display()
 	
 	
 	
+	
+	
 	glTranslatef(2.0,0.0,-8.0);
 	glRotatef(90.0,1.0,0.0,0.0);
 	glTranslatef(0.0,8.0,-2.0);
@@ -145,8 +199,8 @@ void display()
 	
 	//Cube1	
 	glBegin(GL_QUADS);
-    glColor3f(1.0,0.0,0.0);
-    plot_rect(0.5,-0.5,0.5,-1.0,0.5,-0.5);
+    float colors[][3] = {{0.0,0.0,0.0}, {0.2,0.2,0.2}, {0.4,0.4,0.4}, {0.6,0.6,0.6}, {0.8,0.8,0.8}, {1.0,1.0,1.0}};
+    plot_rect(0.5,-0.5,0.25,-1.0,0.5,-0.5, colors);
    
     glEnd();
     
@@ -157,8 +211,7 @@ void display()
     
     glBegin(GL_QUADS);
 	//front
-    glColor3f(1.0,0.0,0.0);
-    plot_rect(0.5,-0.5,0.5,-1.0,0.5,-0.5);
+    plot_rect(0.5,-0.5,0.25,-1.0,0.5,-0.5, colors);
     glEnd();
     
    
@@ -166,35 +219,31 @@ void display()
     
     
     glBegin(GL_QUADS);
-    glColor3f(0.0,0.0,0.0);
-    plot_rect(2.1,-2.1,-0.25,-0.75,0.5,-0.5);
+    plot_rect(2.1,-2.1,-0.25,-0.75,0.5,-0.5, colors);
     glEnd();
     
     glBegin(GL_QUADS);
-    glColor3f(0.1,0.1,0.1);
-    plot_rect(2.3,2.1,0.6,-0.75,0.5,-0.5);
+    plot_rect(2.3,2.1,0.6,-0.75,0.5,-0.5, colors);
     glEnd();
     
     glBegin(GL_QUADS);
-    glColor3f(0.1,0.1,0.1);
-    plot_rect(-2.1,-2.3,0.6,-0.75,0.5,-0.5);
+    plot_rect(-2.1,-2.3,0.6,-0.75,0.5,-0.5, colors);
     glEnd();
     
     glBegin(GL_QUADS);
-    glColor3f(0.05,0.05,0.05);
-    plot_rect(2.3,-2.3,0.6,-0.75,-0.2,-0.5);
+    plot_rect(2.3,-2.3,0.6,-0.75,-0.2,-0.5, colors);
     glEnd();
     
     glBegin(GL_QUADS);
-    glColor3f(0.5,0.5,0.5);
-    plot_rect(1.9,1.8,-0.75,-1.0,0.45,0.35);
+    plot_rect(1.9,1.8,-0.75,-1.0,0.45,0.35, colors);
     glEnd();
     
     glBegin(GL_QUADS);
-    glColor3f(0.5,0.5,0.5);
-    plot_rect(-1.8,-1.9,-0.75,-1.0,0.45,0.35);
+    plot_rect(-1.8,-1.9,-0.75,-1.0,0.45,0.35, colors);
     glEnd();
     
+    
+   
     
     
   //  glRotatef(-30.0,1.0,0.0,0.0);
@@ -217,18 +266,45 @@ void display()
     glColor3f(0.99,0.95,0.85);
     glVertex3f(-16.0,16.0,-1.0);
     glVertex3f(16.0,16.0,-1.0);
-    glVertex3f(16.0,-2.0,-1.0);
-    glVertex3f(-16.0,-2.0,-1.0);
+    glVertex3f(16.0,-1.0,-1.0);
+    glVertex3f(-16.0,-1.0,-1.0);
     
     glEnd();
-	
-	
-	glTranslatef(5.5,0.90,-0.2);
-	glRotatef(90.0,1.0,0.0,0.0);
-    draw_cylinder(0.2,0.4,0.69,0,0);
+    
+    
+
+
+    glBegin(GL_POLYGON);
+    
+    //side wall
+    glColor3f(0.99,0.95,0.85);
+    glVertex3f(-16.0,16.0,-1.0);
+    glVertex3f(-16.0,16.0,16.0);
+    glVertex3f(-16.0,-1.0,16.0);
+    glVertex3f(-16.0,-1.0,-1.0);
+    
+    glEnd();
     
     
 	
+	
+	glTranslatef(0,0.23,0);
+	
+	
+	drawLamp();
+	
+	
+	  glBegin(GL_POLYGON);
+	
+	//frame
+    	glTranslatef(0.5,0.3,0);
+	glColor3f(0.22,0.21,0.20);
+    	glVertex3f(-4.8,1.5,0.0);
+    	glVertex3f(-4.8,-0.4,0.0);
+    	glVertex3f(-0.8,-0.4,0.0);
+    	glVertex3f(-0.8,1.5,0.0);
+	
+	 glEnd();
 	
 	
 	glutSwapBuffers();
@@ -310,7 +386,42 @@ int main(int argc, char** argv) {
   glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
   
   glutInitWindowSize(1000, 1000);
-  glutInitWindowPosition(320, 320);
+  glutInitWindowPosition(100, 100);
+  
+ 
+/* 
+  
+  //Creating Texture
+  int width, height, nrChannels;
+  
+  stbi_set_flip_vertically_on_load(true);
+  unsigned char* data = stbi_load("container1.jpg", &width, &height, &nrChannels, 0); 
+
+  
+  unsigned int texture;
+  glGenTextures(1, &texture); 
+  
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+  
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+  
+  
+  glTexImage2D(GL_TEXTURE_2D,0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE,data);
+  glGenerateMipmap(GL_TEXTURE_2D);
+  
+  
+  stbi_image_free(data); 
+  glBindTexture(GL_TEXTURE_2D,0);
+  
+  */
+  
+  
+  
   
   glutCreateWindow("Cube Test");
   glutReshapeFunc(reshape);
@@ -324,6 +435,12 @@ int main(int argc, char** argv) {
 						// Warning: Nonstandard function! Delete if desired.
 						
   glutSpecialUpFunc(releaseSpecialKey); // process special key release
+  
+  
+
+
+  
+  
   
   
   
