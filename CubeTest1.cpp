@@ -11,6 +11,7 @@
 #include "stb_image.h"
 
 
+
 // Camera position
 float x = 0.0, y = -5.0; // initially 5 units south of origin
 float deltaMove = 0.0; // initially camera doesn't move
@@ -171,6 +172,16 @@ void drawLamp()
 	
 }
 
+void draw_rect(float xmax, float xmin, float ymax, float ymin) {
+  glBegin(GL_POLYGON);
+    	glVertex3f(xmax,ymax,0.0);
+    	glVertex3f(xmax,ymin,0.0);
+    	glVertex3f(xmin,ymin,0.0);
+    	glVertex3f(xmin,ymax,0.0);
+	
+	 glEnd();
+}
+
 
 void display()
 {
@@ -219,15 +230,20 @@ void display()
     
     
     glBegin(GL_QUADS);
-    plot_rect(2.1,-2.1,-0.25,-0.75,0.5,-0.5, colors);
+    plot_rect(2.1,-2.1,-0.25,-0.65,0.7,-0.5, colors);
     glEnd();
     
     glBegin(GL_QUADS);
-    plot_rect(2.3,2.1,0.6,-0.75,0.5,-0.5, colors);
+    plot_rect(2.3,2.1,0.6,-0.85,0.7,-0.5, colors);
     glEnd();
-    
+
+    float colors2[][3] = {{0.1,0.1,0.1}, {0.3,0.3,0.3}, {0.3,0.3,0.3}, {0.5,0.5,0.5}, {0.7,0.7,0.7}, {1.0,1.0,1.0}};
     glBegin(GL_QUADS);
-    plot_rect(-2.1,-2.3,0.6,-0.75,0.5,-0.5, colors);
+    plot_rect(2.1,-2.1,-0.65,-0.85,0.7,-0.5, colors2);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    plot_rect(-2.1,-2.3,0.6,-0.85,0.7,-0.5, colors);
     glEnd();
     
     glBegin(GL_QUADS);
@@ -235,13 +251,27 @@ void display()
     glEnd();
     
     glBegin(GL_QUADS);
-    plot_rect(1.9,1.8,-0.75,-1.0,0.45,0.35, colors);
+    plot_rect(1.9,1.8,-0.75,-1.0,0.65,0.55, colors);
     glEnd();
     
     glBegin(GL_QUADS);
-    plot_rect(-1.8,-1.9,-0.75,-1.0,0.45,0.35, colors);
+    plot_rect(-1.8,-1.9,-0.75,-1.0,0.65,0.55, colors);
     glEnd();
+
+    glTranslatef(1.8,0.0,-0.15);
+    glRotatef(90.0,0.0,0.0,1.0);
     
+    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
+    glRotatef(-90.0,0.0,0.0,1.0);
+    glTranslatef(-1.8,0.0,0.15);
+
+    glTranslatef(-1.8,0.0,-0.15);
+    glRotatef(90.0,0.0,0.0,1.0);
+    
+    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
+    glRotatef(-90.0,0.0,0.0,1.0);
+    glTranslatef(1.8,0.0,0.15);
+
     
    
     
@@ -252,10 +282,10 @@ void display()
     
     //floor
     glColor3f(0.2,0.8,0.6);
-    glVertex3f(-16.0,-1.0,-16.0);
-    glVertex3f(16.0,-1.0,-16.0);
-    glVertex3f(16.0,-1.0,16.0);
-    glVertex3f(-16.0,-1.0,16.0);
+    glVertex3f(-5.0,-1.0,-1.0);
+    glVertex3f(12.0,-1.0,-1.0);
+    glVertex3f(12.0,-1.0,12.0);
+    glVertex3f(-5.0,-1.0,12.0);
     
     glEnd();
 	
@@ -264,10 +294,10 @@ void display()
     
     //wall
     glColor3f(0.99,0.95,0.85);
-    glVertex3f(-16.0,16.0,-1.0);
-    glVertex3f(16.0,16.0,-1.0);
-    glVertex3f(16.0,-1.0,-1.0);
-    glVertex3f(-16.0,-1.0,-1.0);
+    glVertex3f(-5.0,12.0,-1.0);
+    glVertex3f(12.0,12.0,-1.0);
+    glVertex3f(12.0,-1.0,-1.0);
+    glVertex3f(-5.0,-1.0,-1.0);
     
     glEnd();
     
@@ -277,11 +307,11 @@ void display()
     glBegin(GL_POLYGON);
     
     //side wall
-    glColor3f(0.99,0.95,0.85);
-    glVertex3f(-16.0,16.0,-1.0);
-    glVertex3f(-16.0,16.0,16.0);
-    glVertex3f(-16.0,-1.0,16.0);
-    glVertex3f(-16.0,-1.0,-1.0);
+    glColor3f(1.0,0.97,0.87);
+    glVertex3f(-5.0,12.0,-1.0);
+    glVertex3f(-5.0,12.0,12.0);
+    glVertex3f(-5.0,-1.0,12.0);
+    glVertex3f(-5.0,-1.0,-1.0);
     
     glEnd();
     
@@ -294,17 +324,18 @@ void display()
 	drawLamp();
 	
 	
-	  glBegin(GL_POLYGON);
 	
 	//frame
-    	glTranslatef(0.5,0.3,0);
-	glColor3f(0.22,0.21,0.20);
-    	glVertex3f(-4.8,1.5,0.0);
-    	glVertex3f(-4.8,-0.4,0.0);
-    	glVertex3f(-0.8,-0.4,0.0);
-    	glVertex3f(-0.8,1.5,0.0);
+    	glTranslatef(0.0,0.3,0);
+      glColor3f(0.22,0.21,0.20);
+      draw_rect(-0.8, -4.8, 1.5, -0.4);
 	
-	 glEnd();
+	    glColor3f(0.435,0.306,0.216);
+      draw_rect(-4.8, -4.9, 1.5, -0.4);
+      draw_rect(-0.7, -4.9, 1.6, 1.5);
+      draw_rect(-0.7, -0.8, 1.5, -0.4);
+      draw_rect(-0.7, -4.9, -0.5, -0.4);
+	
 	
 	
 	glutSwapBuffers();
