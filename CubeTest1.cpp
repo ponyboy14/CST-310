@@ -183,6 +183,25 @@ void draw_rect(float xmax, float xmin, float ymax, float ymin) {
 }
 
 
+void drawPillows()
+{
+
+ glTranslatef(1.8,0.0,-0.15);
+    glRotatef(90.0,0.0,0.0,1.0);
+    
+    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
+    glRotatef(-90.0,0.0,0.0,1.0);
+    glTranslatef(-1.8,0.0,0.15);
+
+    glTranslatef(-1.8,0.0,-0.15);
+    glRotatef(90.0,0.0,0.0,1.0);
+    
+    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
+    glRotatef(-90.0,0.0,0.0,1.0);
+    glTranslatef(1.8,0.0,0.15);
+
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -258,19 +277,7 @@ void display()
     plot_rect(-1.8,-1.9,-0.75,-1.0,0.65,0.55, colors);
     glEnd();
 
-    glTranslatef(1.8,0.0,-0.15);
-    glRotatef(90.0,0.0,0.0,1.0);
-    
-    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
-    glRotatef(-90.0,0.0,0.0,1.0);
-    glTranslatef(-1.8,0.0,0.15);
-
-    glTranslatef(-1.8,0.0,-0.15);
-    glRotatef(90.0,0.0,0.0,1.0);
-    
-    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
-    glRotatef(-90.0,0.0,0.0,1.0);
-    glTranslatef(1.8,0.0,0.15);
+   
 
     
    
@@ -281,7 +288,7 @@ void display()
     glBegin(GL_POLYGON);
     
     //floor
-    glColor3f(0.2,0.8,0.6);
+    glColor3f(0.70196, 0.70196, 0.70196);
     glVertex3f(-5.0,-1.0,-1.0);
     glVertex3f(12.0,-1.0,-1.0);
     glVertex3f(12.0,-1.0,12.0);
@@ -327,17 +334,55 @@ void display()
 	
 	//frame
     	glTranslatef(0.0,0.3,0);
-      glColor3f(0.22,0.21,0.20);
+      glColor3f(1.0,1.0,1.0);
       draw_rect(-0.8, -4.8, 1.5, -0.4);
 	
-	    glColor3f(0.435,0.306,0.216);
+	    glColor3f(0.20000, 0.10196, 0.00000);
       draw_rect(-4.8, -4.9, 1.5, -0.4);
       draw_rect(-0.7, -4.9, 1.6, 1.5);
       draw_rect(-0.7, -0.8, 1.5, -0.4);
       draw_rect(-0.7, -4.9, -0.5, -0.4);
+      
+      
+      
+      
+      
+      //cushions
+      
+       glTranslatef(-4.9,-2.5,0.6);
+    glRotatef(90.0,0.0,1.0,0.0);
+    draw_cylinder(0.35,4.2,0.80392, 0.76863, 0.69412);
+     
+      glRotatef(-90.0,0.0,1.0,0.0);
+	glTranslatef(0,0,-0.4);
+    glRotatef(90.0,0.0,1.0,0.0);
+    draw_cylinder(0.35,4.3,0.80392, 0.76863, 0.69412);
+    
+     glRotatef(-90.0,0.0,1.0,0.0);
+	glTranslatef(0,0.62,-0.4);
+    glRotatef(90.0,0.0,1.0,0.0);
+    draw_cylinder(0.38,4.3,0.92157, 0.90980, 0.87843);
+    
+    
+     glRotatef(-90.0,0.0,1.0,0.0);
+     glTranslatef(2.1,0,0.5);
+    
+    drawPillows();
+    
+    
+     glColor3f(0.2,0.2,0.2); 
+    glPointSize(20.0);
 	
 	
-	
+	/* glBegin(GL_LINES);
+    glVertex3d(-4, 0,3);
+    glVertex3d(-3,0,3 );
+    glEnd();
+    
+    */
+
+
+
 	glutSwapBuffers();
 }
 
@@ -427,7 +472,6 @@ int main(int argc, char** argv) {
   
   stbi_set_flip_vertically_on_load(true);
   unsigned char* data = stbi_load("container1.jpg", &width, &height, &nrChannels, 0); 
-
   
   unsigned int texture;
   glGenTextures(1, &texture); 
