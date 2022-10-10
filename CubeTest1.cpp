@@ -13,11 +13,11 @@
 
 
 // Camera position
-float x = 0.0, y = -5.0; // initially 5 units south of origin
+float x = 2.0, y = -4.15; // initially 5 units south of origin
 float deltaMove = 0.0; // initially camera doesn't move
 
 // Camera direction
-float lx = 0.0, ly = 1.0; // camera points initially along y-axis
+float lx = -0.5, ly = 1.0; // camera points initially along y-axis
 float angle = 0.0; // angle of rotation for the camera direction
 float deltaAngle = 0.0; // additional angle change when dragging
 
@@ -221,9 +221,9 @@ void display()
 		// Set the camera centered at (x,y,1) and looking along directional
 	// vector (lx, ly, 0), with the z-axis pointing up
 	gluLookAt(
-			x,      y,      1.0,
-			x + lx, y + ly, 1.0,
-			0.0,    0.0,    1.0);
+			x,      y,      2.0,
+			x + lx, y + ly, 2.0,
+			0.0,    0.0,    2.0);
 	
 	
 	
