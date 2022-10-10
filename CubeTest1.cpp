@@ -258,32 +258,38 @@ void display()
    
     glTranslatef(2.9,0.0,0.0);
     
-    
+    // create cushion of the couch
     glBegin(GL_QUADS);
     plot_rect(2.1,-2.1,-0.25,-0.65,0.7,-0.5, colors);
     glEnd();
     
+    // create right arm rest
     glBegin(GL_QUADS);
     plot_rect(2.3,2.1,0.6,-0.85,0.7,-0.5, colors);
     glEnd();
 
+    // create the bottom board of the couch
     float colors2[][3] = {{0.1,0.1,0.1}, {0.3,0.3,0.3}, {0.3,0.3,0.3}, {0.5,0.5,0.5}, {0.7,0.7,0.7}, {1.0,1.0,1.0}};
     glBegin(GL_QUADS);
     plot_rect(2.1,-2.1,-0.65,-0.85,0.7,-0.5, colors2);
     glEnd();
 
+    // create the left arm rest of the couch
     glBegin(GL_QUADS);
     plot_rect(-2.1,-2.3,0.6,-0.85,0.7,-0.5, colors);
     glEnd();
     
+    // create the backboard of the couch
     glBegin(GL_QUADS);
     plot_rect(2.3,-2.3,0.6,-0.75,-0.2,-0.5, colors);
     glEnd();
     
+    //create the right leg
     glBegin(GL_QUADS);
     plot_rect(1.9,1.8,-0.75,-1.0,0.65,0.55, colors);
     glEnd();
     
+    //create the left leg
     glBegin(GL_QUADS);
     plot_rect(-1.8,-1.9,-0.75,-1.0,0.65,0.55, colors);
     glEnd();
@@ -316,6 +322,8 @@ void display()
     glVertex3f(-5.0,-1.0,-1.0);
     
     glEnd();
+
+    // create base board for the back wall
     glColor3f(0.0,0.0,0.0);
     glBegin(GL_POLYGON);
     	glVertex3f(12.0,-0.75,-0.99);
@@ -341,6 +349,7 @@ void display()
     
     glEnd();
 
+    // create base board for the side wall
     glColor3f(0.01,0.02,0.02);
    glBegin(GL_POLYGON);
     	glVertex3f(-4.99,-1.0,-1.0);
@@ -361,12 +370,12 @@ void display()
 
   
 	
-	//frame
+	// create the painting
     	glTranslatef(0.0,0.3,0);
       glColor3f(0.22,0.21,0.20);
       make_painting(-0.8, -4.8, 1.5, -0.4);
 
-	
+      // create the frame for the painting
 	    glColor3f(0.20000, 0.10196, 0.00000);
       draw_rect(-4.8, -4.9, 1.5, -0.4);
       draw_rect(-0.7, -4.9, 1.6, 1.5);
