@@ -241,18 +241,24 @@ void display()
 	//Cube1	
 	glBegin(GL_QUADS);
     float colors[][3] = {{0.0,0.0,0.0}, {0.2,0.2,0.2}, {0.4,0.4,0.4}, {0.6,0.6,0.6}, {0.8,0.8,0.8}, {1.0,1.0,1.0}};
-    plot_rect(0.5,-0.5,0.25,-1.0,0.5,-0.5, colors);
+    float tableBase[][3] = {{0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}};
+    plot_rect(0.5,-0.5,0.25,-0.85,0.5,-0.5, colors);
+    glEnd();
+    // cube1 base
+    glBegin(GL_QUADS);
+    plot_rect(0.475,-0.475,-0.85,-1.0,0.475,-0.475, tableBase);
    
     glEnd();
     
     //Cube2
     
     glTranslatef(-5.8,0.0,0.0);
-    
-    
     glBegin(GL_QUADS);
-	//front
-    plot_rect(0.5,-0.5,0.25,-1.0,0.5,-0.5, colors);
+    plot_rect(0.5,-0.5,0.25,-0.85,0.5,-0.5, colors);
+    glEnd();
+    // cube1 base
+    glBegin(GL_QUADS);
+    plot_rect(0.475,-0.475,-0.85,-1.0,0.475,-0.475, tableBase);
     glEnd();
     
    
@@ -372,7 +378,7 @@ void display()
 	
 	// create the painting
     	glTranslatef(0.0,0.3,0);
-      glColor3f(0.22,0.21,0.20);
+      glColor3f(0.95,0.95,0.95);
       make_painting(-0.8, -4.8, 1.5, -0.4);
 
       // create the frame for the painting
