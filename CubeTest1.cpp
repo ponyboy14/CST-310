@@ -7,9 +7,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
 
 
 // Camera position
@@ -172,6 +172,17 @@ void drawLamp()
 	
 }
 
+void make_painting(float xmax, float xmin, float ymax, float ymin) {
+  glBegin(GL_POLYGON);
+    	
+
+    glVertex3f(xmax,ymax,0.0);
+    	glVertex3f(xmax,ymin,0.0);
+    	glVertex3f(xmin,ymin,0.0);
+    	glVertex3f(xmin,ymax,0.0);
+  glEnd();
+}
+
 void draw_rect(float xmax, float xmin, float ymax, float ymin) {
   glBegin(GL_POLYGON);
     	glVertex3f(xmax,ymax,0.0);
@@ -300,6 +311,23 @@ void display()
     glVertex3f(-5.0,-1.0,-1.0);
     
     glEnd();
+    glColor3f(0.0,0.0,0.0);
+    glBegin(GL_POLYGON);
+    	glVertex3f(12.0,-0.75,-0.99);
+    	glVertex3f(12.0,-1.0,-0.99);
+    	glVertex3f(-5.0,-1.0,-0.99);
+    	glVertex3f(-5.0,-0.75,-0.99);
+	
+	 glEnd();
+
+   glColor3f(0.0,0.0,0.0);
+   glBegin(GL_POLYGON);
+    	glVertex3f(-4.99,-0.75,-1.0);
+    	glVertex3f(-4.99,-1.0,12.0);
+    	glVertex3f(-4.99,-1.0,12.0);
+    	glVertex3f(-4.99,-0.75,-1.0);
+	
+	 glEnd();
     
     
 
@@ -322,13 +350,14 @@ void display()
 	
 	
 	drawLamp();
-	
-	
+
+
+  
 	
 	//frame
     	glTranslatef(0.0,0.3,0);
       glColor3f(0.22,0.21,0.20);
-      draw_rect(-0.8, -4.8, 1.5, -0.4);
+      make_painting(-0.8, -4.8, 1.5, -0.4);
 	
 	    glColor3f(0.435,0.306,0.216);
       draw_rect(-4.8, -4.9, 1.5, -0.4);
