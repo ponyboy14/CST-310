@@ -1,3 +1,5 @@
+#include "shader.h"
+#include "stb_image.h"
 #ifdef __APPLE_CC__
 #include <GLUT/glut.h>
 #else
@@ -9,7 +11,8 @@
 #include <stdlib.h>
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+
+
 
 
 // Camera position
@@ -235,7 +238,8 @@ void display()
 	
 	
 	
-	
+	Shader shader("res/basicShader");
+	shader.Bind();
 	
 	
 	//Cube1	
