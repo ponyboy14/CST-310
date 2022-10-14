@@ -238,7 +238,7 @@ void display()
 	
 	
 	
-	Shader shader("res/basicShader");
+	Shader shader("basicShader");
 	shader.Bind();
 	
 	

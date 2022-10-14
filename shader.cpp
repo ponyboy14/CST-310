@@ -4,8 +4,8 @@
 #include <iostream>
 #include "shader.h"
 
-static void CheckShaderError(GLutint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
-static std::string LoadShader(const std::String& fileName);
+static void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
+static std::string LoadShader(const std::string& fileName);
 
 static GLuint CreateShader(const std::string& text, GLenum shaderType);
 
@@ -14,6 +14,9 @@ static GLuint CreateShader(const std::string& text, GLenum shaderType);
 
 Shader::Shader(const std::string& fileName)
 {
+	GLenum err = glewInit();
+	if (err != GLEW_OK)
+		exit(1);
 	//creating shader program
 	m_program = glCreateProgram();
 	
@@ -28,6 +31,8 @@ Shader::Shader(const std::string& fileName)
 		
 	//Tells OPENGL what part of data to read in as what variable
 	glBindAttribLocation(m_program, 0, "position");
+	glBindAttribLocation(m_program, 1, "texCoord");
+	glBindAttribLocation(m_program, 2, "normal");
 	
 	//Links
 	glLinkProgram(m_program);
@@ -45,7 +50,7 @@ Shader::Shader(const std::string& fileName)
 
 Shader::~Shader()
 {
-	/* //Loop for detaching and deleting shaders
+	//Loop for detaching and deleting shaders
 	for(unsigned int i = 0; i < NUM_SHADERS; i++)
 	{
 		glDetachShader(m_program, m_shaders[i]);
@@ -57,7 +62,6 @@ Shader::~Shader()
 	//deletes the shader program
 	glDeleteProgram(m_program);
 	
-	*/
 	
 }
 
@@ -69,7 +73,7 @@ void Shader::Bind()
 }
 
 
-static GLuint CreateShader(const std::string& text, GLenum shaderType)
+GLuint Shader::CreateShader(const std::string& text, unsigned int shaderType)
 {
 	GLuint shader = glCreateShader(shaderType);
 	
@@ -81,13 +85,13 @@ static GLuint CreateShader(const std::string& text, GLenum shaderType)
 	const GLchar* shaderSourceStrings[1];
 	GLint shaderSourceStringLengths[1];
 	
-	shaderSourceString[0] = text.c_str();
+	shaderSourceStrings[0] = text.c_str();
 	shaderSourceStringLengths[0] = text.length();
 	
 	glShaderSource(shader, 1, shaderSourceStrings, shaderSourceStringLengths);
 	glCompileShader(shader);
 	
-	CheckShaderError(m_program, GL_COMPILE_STATUS, false, "Error: Shader Compilation failed: ");
+	CheckShaderError(shader, GL_COMPILE_STATUS, false, "Error: Shader Compilation failed: ");
 	
 	return shader;
 	
@@ -95,20 +99,20 @@ static GLuint CreateShader(const std::string& text, GLenum shaderType)
 
 
 
-static std::string LoadShader(const std::string& fileName)
+std::string Shader::LoadShader(const std::string& fileName)
 {
 	std::ifstream file;
 	file.open((fileName).c_str());
 	
-	std::String output;
+	std::string output;
 	std::string line;
 	
 	if(file.is_open())
 	{
 		while(file.good())
 		{
-			getline(file.line);
-			output.append(line + "\n");
+			getline(file, line);
+				output.append(line + "\n");
 		}
 	}
 	else
@@ -119,7 +123,7 @@ static std::string LoadShader(const std::string& fileName)
 	return output;
 }
 
-static void CheckShaderError(GLutint shader, GLuint flag, bool isProgram, const std::string& errorMessage)
+void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage)
 {
 	GLint success =0;
 	GLchar error[1024] = {0};
