@@ -1,4 +1,5 @@
 #include "shader.h"
+#include "Mesh.h"
 #include "stb_image.h"
 #ifdef __APPLE_CC__
 #include <GLUT/glut.h>
@@ -238,7 +239,21 @@ void display()
 	
 	
 	
-	Shader shader("basicShader");
+	//vertices are -1 to 1
+	Vertex vertices[] = {
+	
+		Vertex(glm::vec3(-0.5,-0.5,0)),
+		Vertex(glm::vec3(0,0.5,0)),
+		Vertex(glm::vec3(0.5,-0.5,0))
+	
+	};
+	
+	Mesh mesh(vertices, sizeof(vertices)/sizeof(vertices[0]));
+	mesh.Draw();
+	
+	
+	
+	Shader shader("res/basicShader");
 	shader.Bind();
 	
 	
