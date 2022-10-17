@@ -448,7 +448,7 @@ void display()
     
     */
 
-	Shader shader("res/shaded");
+	Shader shader("shaded");
 	shader.Bind();
 	
 	Texture texture("bricks.jpg");

@@ -10,10 +10,10 @@ To run this program you must have:
     GL
 
 Once those libraries are installed, in the terminal you will compile the program with the following command:
-    g++ CubeTest1.cpp -o cubetest1 -lGL -lglfw -lGLEW -lSOIL -lglut -lGLU
+    g++ scene.cpp Mesh.cpp shader.cpp Texture.cpp stb_image.c -o scene -lGL -lglfw -lGLEW -lSOIL -lglut -lGLU
 
 After the program is compiled, you can run it with the following command:
-    ./cubetest1
+    ./scene
 
 Once the program is running, you will traverse the scene with the following methods:
     UP ARROW : Move forward in the direction you are looking
