@@ -97,7 +97,8 @@ void draw_cylinder(GLfloat radius,
                    GLfloat height,
                    GLfloat R,
                    GLfloat G,
-                   GLfloat B)
+                   GLfloat B,
+                   bool shade)
 {
     GLfloat x              = 0.0;
     GLfloat y              = 0.0;
@@ -105,7 +106,13 @@ void draw_cylinder(GLfloat radius,
     GLfloat angle_stepsize = 0.1;
 
     /** Draw the tube */
-    glColor3f(R-0.10,G,B);
+    if(!shade) {
+        glColor3f(R,G,B);
+    }
+    else {
+        glColor3f(R-.05,G-.05,B-.05);
+    }
+    
     glBegin(GL_QUAD_STRIP);
     angle = 0.0;
         while( angle < 2*PI ) {
@@ -141,20 +148,29 @@ void drawLamp()
 	//neck of lamp
 	glTranslatef(2.78,1.0,-0.2);
 	glRotatef(90.0,1.0,0.0,0.0);
-    draw_cylinder(0.09,0.4,0.38,0.36,.35);
+    draw_cylinder(0.09,0.4,0.38,0.36,.35, true);
     
     //Lamp Shade
     glRotatef(-90.0,1.0,0.0,0.0);
     glTranslatef(0.0,0.5,0.0);
     glRotatef(90.0,1.0,0.0,0.0);
-    draw_cylinder(0.4,0.65,0.98,0.86,0.75);
+    draw_cylinder(0.4,0.65,0.98,0.86,0.75, false);
+    draw_cylinder(0.41,0.03,0.97,0.84,0.73, true);
+    glTranslatef(0.0,0.0,0.62);
+    draw_cylinder(0.41,0.03,0.97,0.84,0.73, true);
+    glTranslatef(0.0,0.0,-0.62);
+    glColor3f(0.94,0.80,0.69);
+    glBegin(GL_LINES);
+      glVertex3f(0.0,0.411,0.0);
+      glVertex3f(0.0,0.411,0.65);
+    glEnd();
     
     
     //Lamp top
     glRotatef(-90.0,1.0,0.0,0.0);
     glTranslatef(0.0,0.07,0.0);
     glRotatef(90.0,1.0,0.0,0.0);
-    draw_cylinder(0.04,0.03,0.3,0.3,0.3);
+    draw_cylinder(0.04,0.03,0.3,0.3,0.3, true);
     
     
     
@@ -206,14 +222,14 @@ void drawPillows()
  glTranslatef(1.8,0.0,-0.15);
     glRotatef(90.0,0.0,0.0,1.0);
     
-    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
+    draw_cylinder(0.25,0.8,0.34,0.27,0.20, true);
     glRotatef(-90.0,0.0,0.0,1.0);
     glTranslatef(-1.8,0.0,0.15);
 
     glTranslatef(-1.8,0.0,-0.15);
     glRotatef(90.0,0.0,0.0,1.0);
     
-    draw_cylinder(0.25,0.8,0.3,0.3,0.3);
+    draw_cylinder(0.25,0.8,0.34,0.27,0.20, true);
     glRotatef(-90.0,0.0,0.0,1.0);
     glTranslatef(1.8,0.0,0.15);
 
@@ -262,9 +278,10 @@ void display()
 	
 	//Cube1	
 	glBegin(GL_QUADS);
-    float colors[][3] = {{0.0,0.0,0.0}, {0.2,0.2,0.2}, {0.4,0.4,0.4}, {0.6,0.6,0.6}, {0.8,0.8,0.8}, {1.0,1.0,1.0}};
+     float colors[][3] = {{0.3098,0.2353,0.1765}, {0.309,0.247,0.188}, {0.309,0.247,0.188}, {0.3098,0.2353,0.1765}, {0.3087,0.233,0.171}, {0.3089,0.243,0.176}};
     float tableBase[][3] = {{0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}};
-    plot_rect(0.5,-0.5,0.25,-0.85,0.5,-0.5, colors);
+    float table[][3] = {{0.1,0.1,0.1}, {0.1,0.1,0.1}, {0.0,0.0,0.0}, {0.0,0.0,0.0}, {0.2,0.2,0.2}, {0.0,0.0,0.0}};
+    plot_rect(0.5,-0.5,0.25,-0.85,0.5,-0.5, table);
     glEnd();
     // cube1 base
     glBegin(GL_QUADS);
@@ -276,7 +293,7 @@ void display()
     
     glTranslatef(-5.8,0.0,0.0);
     glBegin(GL_QUADS);
-    plot_rect(0.5,-0.5,0.25,-0.85,0.5,-0.5, colors);
+    plot_rect(0.5,-0.5,0.25,-0.85,0.5,-0.5, table);
     glEnd();
     // cube1 base
     glBegin(GL_QUADS);
@@ -297,7 +314,7 @@ void display()
     glEnd();
 
     // create the bottom board of the couch
-    float colors2[][3] = {{0.1,0.1,0.1}, {0.3,0.3,0.3}, {0.3,0.3,0.3}, {0.5,0.5,0.5}, {0.7,0.7,0.7}, {1.0,1.0,1.0}};
+     float colors2[][3] = {{0.34,0.27,0.20}, {0.309,0.247,0.188}, {0.309,0.247,0.188}, {0.3098,0.2353,0.1765}, {0.3087,0.233,0.171}, {0.3089,0.243,0.176}};
     glBegin(GL_QUADS);
     plot_rect(2.1,-2.1,-0.65,-0.85,0.7,-0.5, colors2);
     glEnd();
@@ -314,12 +331,12 @@ void display()
     
     //create the right leg
     glBegin(GL_QUADS);
-    plot_rect(1.9,1.8,-0.75,-1.0,0.65,0.55, colors);
+    plot_rect(1.9,1.8,-0.75,-1.0,0.65,0.55, tableBase);
     glEnd();
     
     //create the left leg
     glBegin(GL_QUADS);
-    plot_rect(-1.8,-1.9,-0.75,-1.0,0.65,0.55, colors);
+    plot_rect(-1.8,-1.9,-0.75,-1.0,0.65,0.55, tableBase);
     glEnd();
 
     
@@ -331,7 +348,7 @@ void display()
     glBegin(GL_POLYGON);
     
     //floor
-    glColor3f(0.70196, 0.70196, 0.70196);
+    glColor3f(0.5098, 0.4275, 0.3451);
     glVertex3f(-5.0,-1.0,-1.0);
     glVertex3f(12.0,-1.0,-1.0);
     glVertex3f(12.0,-1.0,12.0);
@@ -343,7 +360,7 @@ void display()
     glBegin(GL_POLYGON);
     
     //wall
-    glColor3f(0.99,0.95,0.85);
+    glColor3f(.823,0.76,0.651);
     glVertex3f(-5.0,12.0,-1.0);
     glVertex3f(12.0,12.0,-1.0);
     glVertex3f(12.0,-1.0,-1.0);
@@ -369,7 +386,7 @@ void display()
     glBegin(GL_POLYGON);
     
     //side wall
-    glColor3f(1.0,0.97,0.87);
+     glColor3f(.81,0.75,0.64);
     glVertex3f(-5.0,12.0,-1.0);
     glVertex3f(-5.0,12.0,12.0);
     glVertex3f(-5.0,-1.0,12.0);
@@ -378,7 +395,7 @@ void display()
     glEnd();
 
     // create base board for the side wall
-    glColor3f(0.01,0.02,0.02);
+   glColor3f(0.01,0.02,0.02);
    glBegin(GL_POLYGON);
     	glVertex3f(-4.99,-1.0,-1.0);
     	glVertex3f(-4.99,-1.0,12.0);
@@ -400,7 +417,7 @@ void display()
 	
 	// create the painting
     	glTranslatef(0.0,0.3,0);
-      glColor3f(0.95,0.95,0.95);
+         glColor3f(0.95,0.95,0.95);
       make_painting(-0.8, -4.8, 1.5, -0.4);
 
       // create the frame for the painting
@@ -416,19 +433,48 @@ void display()
       
       //cushions
       
-       glTranslatef(-4.9,-2.5,0.6);
+         glTranslatef(-4.9,-2.5,0.6);
     glRotatef(90.0,0.0,1.0,0.0);
-    draw_cylinder(0.35,4.2,0.80392, 0.76863, 0.69412);
-     
+    draw_cylinder(0.35,4.2,0.36, .30, .22, false);
+    glTranslatef(0,0,1.35);
+    draw_cylinder(0.36,0.01,0.34,0.27,0.20, false);
+    glTranslatef(0,0,1.5);
+    draw_cylinder(0.36,0.01,0.34,0.27,0.20, false);
+    glTranslatef(0,0,-2.85);
+    glColor3f(0.34,0.27,0.20);
+    glBegin(GL_LINE_STRIP);
+      glVertex3f(0.41,0.6,0.0);
+      glVertex3f(0.4125,0.62,1.0625);
+      glVertex3f(0.415,0.64,2.125);
+      glVertex3f(0.4125,0.62,3.1875);
+      glVertex3f(0.41,0.6,4.25);
+    glEnd();
+    for(int i = 0; i < 5; i++){
+        glBegin(GL_LINE_STRIP);
+          glVertex3f(0.55,1.0,0.75+ i*.75);
+          glVertex3f(0.44,0.75,0.75+ i*.75);
+          glVertex3f(0.41,0.6,0.75+i*.75);
+          glVertex3f(0.45,0.45,0.75+i*.75);
+          glVertex3f(0.5,0.3,0.75+i*.75);
+        glEnd();
+    }
+    
+    
       glRotatef(-90.0,0.0,1.0,0.0);
 	glTranslatef(0,0,-0.4);
     glRotatef(90.0,0.0,1.0,0.0);
-    draw_cylinder(0.35,4.3,0.80392, 0.76863, 0.69412);
+    draw_cylinder(0.35,4.2,0.36, .30, .22, false);
+    glTranslatef(0,0,1.35);
+    draw_cylinder(0.36,0.01,0.34,0.27,0.20, false);
+    glTranslatef(0,0,1.5);
+    draw_cylinder(0.36,0.01,0.34,0.27,0.20, false);
+    glTranslatef(0,0,-2.85);
+
     
      glRotatef(-90.0,0.0,1.0,0.0);
 	glTranslatef(0,0.62,-0.4);
     glRotatef(90.0,0.0,1.0,0.0);
-    draw_cylinder(0.38,4.3,0.92157, 0.90980, 0.87843);
+    draw_cylinder(0.38,4.3,0.36, .30, .22, false);
     
     
      glRotatef(-90.0,0.0,1.0,0.0);
@@ -448,17 +494,18 @@ void display()
     
     */
 
-	Shader shader("shaded");
-	shader.Bind();
-	
-	Texture texture("bricks.jpg");
 
-	texture.Bind(0);
+	//Shader shader("res/shaded");
+	//shader.Bind();
+	
+	//Texture texture("bricks.jpg");
+
+	//texture.Bind(0);
 
 
 	glTranslatef(0,4.5,0.6);
-	Mesh mesh(vertices, sizeof(vertices)/sizeof(vertices[0]));
-	mesh.Draw();
+	//Mesh mesh(vertices, sizeof(vertices)/sizeof(vertices[0]));
+	//mesh.Draw();
 
 
 
