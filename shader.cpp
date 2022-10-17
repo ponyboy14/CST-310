@@ -1,5 +1,3 @@
-
-
 #include <fstream>
 #include <iostream>
 #include "shader.h"
@@ -31,6 +29,8 @@ Shader::Shader(const std::string& fileName)
 		
 	//Tells OPENGL what part of data to read in as what variable
 	glBindAttribLocation(m_program, 0, "position");
+	glBindAttribLocation(m_program, 1, "texCoord");
+	
 	glBindAttribLocation(m_program, 1, "texCoord");
 	glBindAttribLocation(m_program, 2, "normal");
 	

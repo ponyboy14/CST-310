@@ -10,6 +10,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <vector>
 #include "Texture.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -243,10 +244,9 @@ void display()
 	//vertices are -1 to 1
 	Vertex vertices[] = {
 	
-		Vertex(glm::vec3(-0.5,-0.5,0)),
-		Vertex(glm::vec3(-0.5,0.5,0)),
-		Vertex(glm::vec3(0,0.5,0)),
-		Vertex(glm::vec3(0.0,-0.5,0))
+		Vertex(glm::vec3(-0.5,-0.5,0), glm::vec2(0.0,0.0)),
+		Vertex(glm::vec3(0,0.5,0), glm::vec2(0.5,1.0)),
+		Vertex(glm::vec3(0.5,-0.5,0), glm::vec2(1.0,0.0)),
 	
 	};
 	
@@ -254,7 +254,7 @@ void display()
 	
 	
 	
-	//Shader shader("res/basicShader");
+	
 	//shader.Bind();
 	
 	
@@ -448,8 +448,10 @@ void display()
     
     */
 
-
-	Texture texture("Container1.jpg");
+	Shader shader("res/shaded");
+	shader.Bind();
+	
+	Texture texture("bricks.jpg");
 
 	texture.Bind(0);
 
