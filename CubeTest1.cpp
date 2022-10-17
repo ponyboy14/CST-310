@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include "Texture.h"
 #define STB_IMAGE_IMPLEMENTATION
 
 
@@ -243,18 +244,20 @@ void display()
 	Vertex vertices[] = {
 	
 		Vertex(glm::vec3(-0.5,-0.5,0)),
+		Vertex(glm::vec3(-0.5,0.5,0)),
 		Vertex(glm::vec3(0,0.5,0)),
-		Vertex(glm::vec3(0.5,-0.5,0))
+		Vertex(glm::vec3(0.0,-0.5,0))
 	
 	};
 	
-	Mesh mesh(vertices, sizeof(vertices)/sizeof(vertices[0]));
-	mesh.Draw();
 	
 	
 	
-	Shader shader("res/basicShader");
-	shader.Bind();
+	
+	//Shader shader("res/basicShader");
+	//shader.Bind();
+	
+	
 	
 	
 	//Cube1	
@@ -446,6 +449,16 @@ void display()
     */
 
 
+	Texture texture("Container1.jpg");
+
+	texture.Bind(0);
+
+
+	glTranslatef(0,4.5,0.6);
+	Mesh mesh(vertices, sizeof(vertices)/sizeof(vertices[0]));
+	mesh.Draw();
+
+
 
 	glutSwapBuffers();
 }
@@ -529,35 +542,10 @@ int main(int argc, char** argv) {
   glutInitWindowPosition(100, 100);
   
  
-/* 
-  
-  //Creating Texture
-  int width, height, nrChannels;
-  
-  stbi_set_flip_vertically_on_load(true);
-  unsigned char* data = stbi_load("container1.jpg", &width, &height, &nrChannels, 0); 
-  
-  unsigned int texture;
-  glGenTextures(1, &texture); 
-  
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-  
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-  
-  
-  glTexImage2D(GL_TEXTURE_2D,0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE,data);
-  glGenerateMipmap(GL_TEXTURE_2D);
-  
-  
-  stbi_image_free(data); 
-  glBindTexture(GL_TEXTURE_2D,0);
-  
-  */
+ 
+ 
+ 
+ 	
   
   
   
