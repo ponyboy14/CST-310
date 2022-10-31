@@ -22,6 +22,7 @@ float lastFrame = 0.0f;
 
 int main()
 {
+    // create and setup the window
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -45,6 +46,7 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
+    // set the look of the window
     glm::mat4 view = glm::lookAt(glm::vec3(-1.0f, 1.0f, 6.0f),
                 glm::vec3(2.5f, 1.0f, 0.0f),
                 glm::vec3(0.0f, 1.0f, 0.0f)
@@ -132,12 +134,13 @@ int main()
 
     };
 
-
+    // shininess values of the cubes
     int shiny[8] = {32, 64, 128, 256, 2, 4, 8, 16};
 
     // load in the lighting shaders
     Shader lightingShader("lighting.vs", "lighting.fs");
 
+    // bind buffers and arrays
     unsigned int VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &VBO);
@@ -154,63 +157,49 @@ int main()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-
-    // render loop
-    // -----------
     while (!glfwWindowShouldClose(window))
     {
-        // per-frame time logic
-        // --------------------
+        // compute timing
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // input
-        // -----
-        // render
-        // ------
+        // clear the last frame
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         
-
+        // create each cube
         for (int i = 0; i < 8; i++) {
-            // be sure to activate shader when setting uniforms/drawing objects
+            // activate shader and update the values
             lightingShader.use();
             lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
             lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
             lightingShader.setVec3("lightPos", lightPos[i]);
             lightingShader.setVec3("viewPos", viewPos[i]);
             lightingShader.setInt("shininess", shiny[i]);
-
-            // view/projection transformations
             glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
             lightingShader.setMat4("projection", projection);
             lightingShader.setMat4("view", view);
-            // world tra nsformation
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
             lightingShader.setMat4("model", model);
 
-            // render the cube
+            // create the cube with the shader attached
             glBindVertexArray(cubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             
         }
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
+    // delete buffers and arrays
     glDeleteVertexArrays(1, &cubeVAO);
     glDeleteBuffers(1, &VBO);
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
+    // end the window
     glfwTerminate();
     return 0;
 }
