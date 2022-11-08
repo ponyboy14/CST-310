@@ -55,7 +55,7 @@ void draw(GLint vert[][3], GLint face[][4],GLfloat color [][3] ) {
   glBegin(GL_QUADS);
   for (int i = 0; i < NUM_FACES; i++) {
     for (int j = 0; j < 4; j++) {
-      glColor3fv((GLfloat*)&vertexColors[faces[i][j]]);
+      glColor3fv((GLfloat*)&color[faces[i][j]]);
       glVertex3iv((GLint*)&vertices[faces[i][j]]);
     }
   }
@@ -74,32 +74,32 @@ void draw(GLint vert[][3], GLint face[][4],GLfloat color [][3] ) {
 void display() {
 
 
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glBegin(GL_QUADS);
-  	glVertex3f(-4.0,2.0,0);
-  	glVertex3f(4.0,2.0,0);
-  	glVertex3f(4.0,2.0,4.0);
-  	glVertex3f(-4.0,2.0,4.0);
+  	glVertex3f(-4.0,5,-4);
+  	glVertex3f(4.0,5,-4);
+  	glVertex3f(4.0,5,4.0);
+  	glVertex3f(-4.0,5,4.0);
   glEnd();
   
-   glBegin(GL_QUADS);
-  	glVertex3f(-4.0,-4.0,0);
-  	glVertex3f(4.0,-4.0,0);
-  	glVertex3f(4.0,-4.0,4.0);
-  	glVertex3f(-4.0,-4.0,4.0);
-  glEnd();
+  
   	
   
   
   draw(vertices, faces, vertexColors);
   glTranslatef(0,yMove,0);
   glTranslatef(3.0,0,0);
-  draw(vertices, faces, vertexColors);
+  draw(vertices, faces, vertexColors1);
   glTranslatef(-6.0,0,0);
   glTranslatef(0,-2*yMove,0);
-  draw(vertices, faces, vertexColors);
- 
-  
+  draw(vertices, faces, vertexColors1);
+  glTranslatef(3,yMove,0);
+   glBegin(GL_QUADS);
+  	glVertex3f(-4.0,-4.5,-4);
+  	glVertex3f(4.0,-4.5,-4);
+  	glVertex3f(4.0,-4.5,4.0);
+  	glVertex3f(-4.0,-4.5,4.0);
+  glEnd();
   
   
   glFlush();
@@ -187,13 +187,16 @@ void reshape(int w, int h) {
 void init() {
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
+
+  glEnable(GL_DEPTH_TEST);
 }
 
 // The usual main for a GLUT application.
 int main(int argc, char** argv) {
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-  glutInitWindowSize(500, 500);
+  
+  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+  
   glutCreateWindow("The RGB Color Cube");
   glutReshapeFunc(reshape);
   glutTimerFunc(100, timer, 0);
