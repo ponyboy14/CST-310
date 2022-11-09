@@ -13,9 +13,19 @@
 
 GLfloat yMove  = 0.0;
 GLint counter = 0;
+GLfloat rotate = 0.0;
+GLfloat shift = 0.0;
+GLfloat zoom = 0.0;
 
 bool moveUp = true;
 bool moveDown = false;
+bool stop = false;
+bool go = true;
+bool rotateImg = false;
+bool shiftUp =false;
+bool shiftDown = false;
+bool zoomIn = false;
+bool zoomOut = false;
 
 
 // The cube has opposite corners at (0,0,0) and (1,1,1), which are black and
@@ -75,6 +85,12 @@ void display() {
 
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
+  
+  glRotatef(rotate, 0,0,1);
+  glTranslatef(0, shift,zoom);
+
+  
    glBegin(GL_QUADS);
   	glVertex3f(-4.0,5,-4);
   	glVertex3f(4.0,5,-4);
@@ -83,7 +99,6 @@ void display() {
   glEnd();
   
   
-  	
   
   
   draw(vertices, faces, vertexColors);
@@ -94,9 +109,11 @@ void display() {
   glTranslatef(0,-2*yMove,0);
   draw(vertices, faces, vertexColors1);
   glTranslatef(3,yMove,0);
-   glBegin(GL_QUADS);
-  	glVertex3f(-4.0,-4.5,-4);
-  	glVertex3f(4.0,-4.5,-4);
+   
+  
+  	glBegin(GL_QUADS);
+  	glVertex3f(-4.0,-4.5,-6);
+  	glVertex3f(4.0,-4.5,-6);
   	glVertex3f(4.0,-4.5,4.0);
   	glVertex3f(-4.0,-4.5,4.0);
   glEnd();
@@ -112,6 +129,63 @@ void display() {
 // at the center of the cube (0.5, 0.5, 0.5) and vary the up vector to achieve
 // a weird tumbling effect.
 void timer(int v) {
+
+
+
+ if(stop)
+  {
+  
+ 	rotate = 0;
+ 	
+ 	 	
+
+ 
+  
+   	  if(zoomIn)
+  {
+  
+  	zoom += 0.02;
+  	zoomIn = false;
+  }
+  
+  if(zoomOut)
+  {
+  
+  	zoom -= 0.02;
+  	zoomOut = false;
+  }
+  
+ 	
+ 	
+ 	
+ 	  
+
+
+  if(shiftUp)
+  {
+  
+  	shift += 0.01;
+  	shiftUp = false;
+  }
+  
+  if(shiftDown)
+  {
+  
+  	shift -= 0.01;
+  	shiftDown = false;
+  }
+ 	
+ 	
+ 	// glutPostRedisplay();
+  }
+
+
+
+if(go)
+{
+
+	zoom = 0;
+	//shift = 0;
 
    if(moveUp)
   {
@@ -147,14 +221,37 @@ void timer(int v) {
   	
   	
   }
+  
+  
+  
+ 
 
-
-
-
+  
+  
+  
   static GLfloat u = 0.0;
   u += 0.01;
   glLoadIdentity();
   gluLookAt(8*cos(u), 7*cos(u)-1, 4*cos(u/3)+2, .5, .5, .5, cos(u), 1, 0);
+  
+  
+  
+  	if(rotateImg)
+  {
+  	
+  	rotate += 20;
+  	glutPostRedisplay();
+  	rotateImg = false;
+  }
+  
+  }
+  
+  
+
+
+  
+
+
   glutPostRedisplay();
   
   
@@ -164,6 +261,37 @@ void timer(int v) {
   
   glutTimerFunc(1000/60.0, timer, v);
 }
+
+
+void processNormalKeys(unsigned char key, int x, int y)
+{
+	
+	const char r = 'r';
+	const char s = 's';
+	const char c = 'c';
+	const char u = 'u';
+	const char d = 'd';
+	const char z = '+';
+	const char o = '-';
+
+
+	switch (key) {
+		
+		case r: rotateImg = true; break;
+		case s: stop = true; go = false; break;
+		case c: go = true; stop = false; break;
+		case u: shiftUp = true; break;
+		case d: shiftDown = true; break;
+		case z: zoomIn = true; break;
+		case o: zoomOut = true; break;
+		
+		
+	}
+} 
+
+
+
+
 
 // When the window is reshaped we have to recompute the camera settings to
 // match the new window shape.  Set the viewport to (0,0)-(w,h).  Set the
@@ -200,6 +328,7 @@ int main(int argc, char** argv) {
   glutCreateWindow("The RGB Color Cube");
   glutReshapeFunc(reshape);
   glutTimerFunc(100, timer, 0);
+  glutKeyboardFunc(processNormalKeys);
   glutDisplayFunc(display);
   init();
   glutMainLoop();
