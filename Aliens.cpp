@@ -235,7 +235,19 @@ void display()
     plot_rect(0.475,-0.475,-0.85,-1.0,0.475,-0.475, tableBase);
    
     glEnd();
-    
+
+
+    glTranslatef(0.0,8.0,0.0);
+
+    glColor3f(.61,.75,.9);
+    gluSphere(gluNewQuadric(), 2, 20, 20);
+
+    glColor3f(.727,.727,.727);
+    glTranslatef(0.0,-0.8,0.0);
+    glScalef(2.0,0.6,1.0);
+    gluSphere(gluNewQuadric(), 2, 20, 20);
+    glScalef(0.5,1.8,1.0);
+    glTranslatef(0.0,-7.2,0.0);
     
     
       
