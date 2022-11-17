@@ -31,6 +31,14 @@ int xDragStart = 0; // records the x-coordinate when dragging starts
 
 
 int carMove;
+int carMove1;
+int alienMove;
+int carFloat;
+int carRotate;
+
+
+bool capture = false;
+bool carVisible = true;
 
 
 
@@ -255,8 +263,12 @@ void display()
 	
     
     
-       glTranslatef(0.0,8.0,0.0);
+    
+    
+    glTranslatef(0.0,8.0,-4.0);
+    glTranslatef(0,0,alienMove);
 
+    // Alien Saucer
     glColor3f(.61,.75,.9);
     gluSphere(gluNewQuadric(), 2, 20, 20);
 
@@ -269,6 +281,8 @@ void display()
     
     
     
+    glTranslatef(0,0,-alienMove);
+     glTranslatef(0,0,4);
     
       
     
@@ -299,7 +313,7 @@ void display()
 	
 	
 
-   glTranslatef(-10.0,-1.4,10.0);
+   glTranslatef(-20.0,-1.4,10.0);
    
    
    
@@ -307,6 +321,10 @@ void display()
    
     
    drawCar();
+   
+   //glTranslatef(-20, 0, 0);
+   
+   //drawCar();
 
 
     glTranslatef(-carMove, 0, 0);
@@ -317,7 +335,7 @@ void display()
 
 
 
-    glTranslatef(10,0.6,-2);
+    glTranslatef(20,0.6,-2);
     
      glBegin(GL_POLYGON);
     
@@ -332,8 +350,44 @@ void display()
 
 
 
+
+    //Drawing Second car
+    glTranslatef(-40, -1.5,4);
+    
+    if(carVisible)
+    {
+    glTranslatef(carMove1, 0, 0);
+    glTranslatef(0,carFloat,0);
+    glRotatef(carRotate,0.0,0.0,1.0);
+    
+    drawCar();
+    
+    
+    glRotatef(-carRotate,0.0,0.0,1.0);
+    glTranslatef(0,-carFloat,0);
+    glTranslatef(-carMove1, 0, 0);
+    
+    
+    glTranslatef(37.5,0,-1.5);
+    
+    
+    //Draws alien green triangle
   
-      
+    if(capture)
+    {
+    
+    	glBegin(GL_TRIANGLES);
+    	glColor3f(0.1, 0.6, 0.2);
+    	glVertex3f(-6,-1,-0.5);
+    	glVertex3f(0.5,8,-0.5);
+    	glVertex3f(6,-1,-0.5);
+    	
+    	glEnd();
+    		
+    
+    }
+    
+    }
   
     
     	glFlush();
@@ -344,12 +398,51 @@ void display()
 //increments the angle of rotation and redisplays window
 void timer(int v) {
 
-
-     carMove+=2;
+     if(carMove1<38)
+     {
+     carMove1+=1.95;
+     }
+     else
+     {
+      capture = true;
+      
+      if(carFloat<4)
+      {
+      carFloat+=1;
+      carRotate+=20;
+      }
+      else
+      {
+      
+      carVisible = false;
+      
+      }
+      
+      
+     }
+     
+     
+     if(!carVisible)
+     {
+     	alienMove+=1;
+     }
+     
+     
+     carMove+=1.95;
+     
+     if(alienMove<10)
+     {
+     alienMove+=1;
+     }
+     
+     
+     
+     
+     
      
      glutPostRedisplay();
      
-     glutTimerFunc(10000/FPS, timer, v);
+     glutTimerFunc(4000/FPS, timer, v);
 
 
 
