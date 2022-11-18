@@ -266,6 +266,27 @@ void draw_tree(float x_coord, float z_coord) {
 
 }
 
+void draw_tree_3d(float x_coord, float z_coord) {
+    glTranslatef(x_coord,0,z_coord);
+    glRotatef(-90.0,1.0,0.0,0.0);
+    glColor3f(.588,.294,0);
+    draw_cylinder(.5,3,.588,.294,0,false);
+    glTranslatef(0.0,0,1.0);
+    glColor3f(0,.20,0);
+    glutSolidCone(2, 2, 70, 12);
+    glTranslatef(0.0,0,1.0);
+    glColor3f(0,.31,0);
+    glutSolidCone(1.8, 2, 70, 12);
+    glTranslatef(0.0,0,1.0);
+    glColor3f(0,.42,0);
+    glutSolidCone(1.6, 2, 70, 12);
+    glTranslatef(0.0,0,-3.0);
+    glRotatef(90.0,1.0,0.0,0.0);
+    glTranslatef(-x_coord,0,-z_coord);
+    
+
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -292,14 +313,14 @@ void display()
 	glTranslatef(0.0,8.0,-23.0);
 
 	glTranslatef(0.0,-2,0);
-	draw_tree(0,0);
-    draw_tree(-16,1.5);
-    draw_tree(-23, 3.5);
-    draw_tree(13,15);
-    draw_tree(-12, 13);
-    draw_tree(14, 2);
-    draw_tree(20,4);
-    draw_tree(-16, 18);
+	draw_tree_3d(0,0);
+    draw_tree_3d(-16,1.5);
+    draw_tree_3d(-23, 3.5);
+    draw_tree_3d(13,15);
+    draw_tree_3d(-12, 13);
+    draw_tree_3d(14, 2);
+    draw_tree_3d(20,4);
+    draw_tree_3d(-16, 18);
     glTranslatef(0.0,2,0);
 	
     
