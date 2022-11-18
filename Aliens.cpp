@@ -30,6 +30,19 @@ int isDragging = 0; // true when dragging
 int xDragStart = 0; // records the x-coordinate when dragging starts
 
 
+int carMove;
+int carMove1;
+int alienMove;
+int carFloat;
+int carRotate;
+
+
+bool capture = false;
+bool carVisible = true;
+
+
+
+
 
 #define PI 3.1415927
 #define ESC 27
@@ -37,7 +50,10 @@ int xDragStart = 0; // records the x-coordinate when dragging starts
 
 void display();
 void reshape(int,int);
-void timer(int);
+
+
+//number of frames per second to render
+static const int FPS = 60;
 
 
 void init()
@@ -162,6 +178,9 @@ void drawCar()
     glBegin(GL_QUADS);
      float colors[][3] = {{0.8,0.2353,0.1765}, {0.8,0.2353,0.1765}, {0.8,0.2353,0.1765},  	{0.8,0.2353,0.1765}, {0.8,0.2353,0.1765}, {0.8,0.2353,0.1765}};
      
+     
+     
+     //car body
     plot_rect(1.5,-0.5,0.5,0.0,0.5,-0.5, colors);
     
     plot_rect(2.5,-1.5,0,-1,0.5,-0.5,colors);
@@ -173,28 +192,46 @@ void drawCar()
 
 
 
-    glTranslatef(-0.4,-1.0,0.0);
+    glTranslatef(-0.4,-1.0,0.2);
+
+
+	
+    //left tire front
+    
+    draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
+    
+    
+    glTranslatef(0,0,-0.9);
+    
+    
+    //left tire back
+    
+    draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
+    
+    
+    
 
     
-    draw_cylinder(0.4,0.8,0.34,0.27,0.20, true);
-    glRotatef(-90.0,0.0,0.0,1.0);
-    glTranslatef(-1.8,0.0,0.15);
+    
+    glTranslatef(1.5,0,0.9);
+   // glRotatef(90.0,0.0,0.0,1.0);
     
     
-    glTranslatef(0.4,0.0,0.0);
-    glRotatef(90.0,0.0,0.0,1.0);
     
     
-    draw_cylinder(0.4,0.8,0.34,0.27,0.20, true);
-    glRotatef(-90.0,0.0,0.0,1.0);
-    glTranslatef(-1.8,0.0,0.15);
+    //Right tire front
+    draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
+    
+    glTranslatef(0,0,-0.9);
+    
+    
+    //Right tire back
+    
+    draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
 
-    //glTranslatef(-1.8,0.0,0.);
-    //glRotatef(90.0,0.0,0.0,1.0);
+    glTranslatef(0,0,0.9);
+
     
-   // draw_cylinder(0.25,0.8,0.34,0.27,0.20, true);
-    //glRotatef(-90.0,0.0,0.0,1.0);
-    //glTranslatef(1.8,0.0,0.15);
 
 }
 
@@ -223,32 +260,29 @@ void display()
 
 	
 	
-	//Cube1	
-	glBegin(GL_QUADS);
-     float colors[][3] = {{0.3098,0.2353,0.1765}, {0.309,0.247,0.188}, {0.309,0.247,0.188}, {0.3098,0.2353,0.1765}, {0.3087,0.233,0.171}, {0.3089,0.243,0.176}};
-    float tableBase[][3] = {{0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}, {0.5,0.5,0.5}};
-    float table[][3] = {{0.1,0.1,0.1}, {0.1,0.1,0.1}, {0.0,0.0,0.0}, {0.0,0.0,0.0}, {0.2,0.2,0.2}, {0.0,0.0,0.0}};
-    plot_rect(0.5,-0.5,0.25,-0.85,0.5,-0.5, table);
-    glEnd();
-    // cube1 base
-    glBegin(GL_QUADS);
-    plot_rect(0.475,-0.475,-0.85,-1.0,0.475,-0.475, tableBase);
-   
-    glEnd();
+	
+    
+    
+    
+    
+    glTranslatef(0.0,8.0,-4.0);
+    glTranslatef(0,0,alienMove);
 
-
-    glTranslatef(0.0,8.0,0.0);
-
+    // Alien Saucer
     glColor3f(.61,.75,.9);
     gluSphere(gluNewQuadric(), 2, 20, 20);
 
-    glColor3f(.727,.727,.727);
+    glColor3f(.527,.527,.527);
     glTranslatef(0.0,-0.8,0.0);
     glScalef(2.0,0.6,1.0);
     gluSphere(gluNewQuadric(), 2, 20, 20);
     glScalef(0.5,1.8,1.0);
     glTranslatef(0.0,-7.2,0.0);
     
+    
+    
+    glTranslatef(0,0,-alienMove);
+     glTranslatef(0,0,4);
     
       
     
@@ -279,23 +313,143 @@ void display()
 	
 	
 
-   glTranslatef(2.0,0.0,8.0);
+   glTranslatef(-20.0,-1.4,10.0);
+   
+   
+   
+   glTranslatef(carMove, 0, 0);
+   
     
    drawCar();
+   
+   //glTranslatef(-20, 0, 0);
+   
+   //drawCar();
+
+
+    glTranslatef(-carMove, 0, 0);
+
+
 
     
+
+
+
+    glTranslatef(20,0.6,-2);
     
+     glBegin(GL_POLYGON);
+    
+    //Road
+    glColor3f(0.4, 0.4, 0.4);
+    glVertex3f(-100.0,-1.0,4.0);
+    glVertex3f(100.0,-1.0,-3.0);
+    glVertex3f(100.0,-1.0,4.0);
+    glVertex3f(-100.0,-1.0,-3.0);
+    
+    glEnd();
 
 
 
+
+    //Drawing Second car
+    glTranslatef(-40, -1.5,4);
+    
+    if(carVisible)
+    {
+    glTranslatef(carMove1, 0, 0);
+    glTranslatef(0,carFloat,0);
+    glRotatef(carRotate,0.0,0.0,1.0);
+    
+    drawCar();
+    
+    
+    glRotatef(-carRotate,0.0,0.0,1.0);
+    glTranslatef(0,-carFloat,0);
+    glTranslatef(-carMove1, 0, 0);
+    
+    
+    glTranslatef(37.5,0,-1.5);
+    
+    
+    //Draws alien green triangle
   
-      
+    if(capture)
+    {
+    
+    	glBegin(GL_TRIANGLES);
+    	glColor3f(0.1, 0.6, 0.2);
+    	glVertex3f(-6,-1,-0.5);
+    	glVertex3f(0.5,8,-0.5);
+    	glVertex3f(6,-1,-0.5);
+    	
+    	glEnd();
+    		
+    
+    }
+    
+    }
   
     
-    
+    	glFlush();
 
 	glutSwapBuffers();
 }
+
+//increments the angle of rotation and redisplays window
+void timer(int v) {
+
+     if(carMove1<38)
+     {
+     carMove1+=1.95;
+     }
+     else
+     {
+      capture = true;
+      
+      if(carFloat<4)
+      {
+      carFloat+=1;
+      carRotate+=20;
+      }
+      else
+      {
+      
+      carVisible = false;
+      
+      }
+      
+      
+     }
+     
+     
+     if(!carVisible)
+     {
+     	alienMove+=1;
+     }
+     
+     
+     carMove+=1.95;
+     
+     if(alienMove<10)
+     {
+     alienMove+=1;
+     }
+     
+     
+     
+     
+     
+     
+     glutPostRedisplay();
+     
+     glutTimerFunc(4000/FPS, timer, v);
+
+
+
+}
+
+
+
 
 void update(void) 
 {
@@ -387,32 +541,28 @@ int main(int argc, char** argv) {
   glutCreateWindow("Cube Test");
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
+  glutTimerFunc(100,timer,0);
   glutIdleFunc(update); // incremental update 
   glutIgnoreKeyRepeat(1); // ignore key repeat when holding key down
   glutMouseFunc(mouseButton);
   glutMotionFunc(mouseMove); // process mouse dragging motion
-  //glutKeyboardFunc(processNormalKeys);
-  //glutSpecialFunc(pressSpecialKey); // process special key pressed
+  glutKeyboardFunc(processNormalKeys);
+  glutSpecialFunc(pressSpecialKey); // process special key pressed
 						// Warning: Nonstandard function! Delete if desired.
 						
-  //glutSpecialUpFunc(releaseSpecialKey); // process special key release
+  glutSpecialUpFunc(releaseSpecialKey); // process special key release
    
   
   //glutTimerFunc(0,timer,0);
   
+ 
   
   
   init();
   glutMainLoop();
  
- return 0; 
+// return 0; 
   
   
 }
 
-
-void timer(int)
-{
-	glutPostRedisplay();
-	glutTimerFunc(1000/60,timer,0);
-}
