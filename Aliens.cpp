@@ -24,6 +24,7 @@ float deltaMove = 0.0; // initially camera doesn't move
 float lx = -0.5, ly = 1.0; // camera points initially along y-axis
 float angle = 0.0; // angle of rotation for the camera direction
 float deltaAngle = 0.0; // additional angle change when dragging
+float beam =0.0;
 
 // Mouse drag control
 int isDragging = 0; // true when dragging
@@ -235,6 +236,36 @@ void drawCar()
 
 }
 
+void draw_tree(float x_coord, float z_coord) {
+    glTranslatef(x_coord,0,z_coord);
+    glColor3f(.588,.294,0);
+    glRectf(0,0,1,3);
+    glTranslatef(0.0,0,0.01);
+    glColor3f(0,.20,0);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(-1.3,1);
+    glVertex2f(2.3,1);
+    glVertex2f(.5,3);
+    glEnd();
+    glTranslatef(0.0,0,0.01);
+    glColor3f(0,.31,0);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(-1.1,2);
+    glVertex2f(2.1,2);
+    glVertex2f(.5,4);
+    glEnd();
+    glTranslatef(0.0,0,0.01);
+    glColor3f(0,.42,0);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(-1,3);
+    glVertex2f(2,3);
+    glVertex2f(.5,5);
+    glEnd();
+    glTranslatef(0.0,0,-0.03);
+    glTranslatef(-x_coord,0,-z_coord);
+
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -256,10 +287,20 @@ void display()
 	
 	glTranslatef(2.0,0.0,-8.0);
 	glRotatef(90.0,1.0,0.0,0.0);
+
+    
 	glTranslatef(0.0,8.0,-23.0);
 
-	
-	
+	glTranslatef(0.0,-2,0);
+	draw_tree(0,0);
+    draw_tree(-16,1.5);
+    draw_tree(-23, 3.5);
+    draw_tree(13,15);
+    draw_tree(-12, 13);
+    draw_tree(14, 2);
+    draw_tree(20,4);
+    draw_tree(-16, 18);
+    glTranslatef(0.0,2,0);
 	
     
     
@@ -368,7 +409,7 @@ void display()
     glTranslatef(-carMove1, 0, 0);
     
     
-    glTranslatef(37.5,0,-1.5);
+    glTranslatef(37.5 + beam,0,-1.5);
     
     
     //Draws alien green triangle
@@ -398,13 +439,14 @@ void display()
 //increments the angle of rotation and redisplays window
 void timer(int v) {
 
-     if(carMove1<38)
+     if(carMove1<40)
      {
      carMove1+=1.95;
      }
      else
      {
       capture = true;
+      beam += 0.5;
       
       if(carFloat<4)
       {
