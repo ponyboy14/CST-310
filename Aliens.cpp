@@ -499,13 +499,26 @@ void timer(int v) {
      }
      
      
+     if(alienMove>30)
+     {
+     	alienMove = 0;
+     	carFloat = 0; 
+     	carRotate = 0; 
+     	carMove = 0;
+     	carMove1 = 0;
+     	beam = 0;
+     	capture = false;
+     	carVisible = true;
+     }
+     
+     
      
      
      
      
      glutPostRedisplay();
      
-     glutTimerFunc(4000/FPS, timer, v);
+     glutTimerFunc(6000/FPS, timer, v);
 
 
 
