@@ -236,36 +236,6 @@ void drawCar()
 
 }
 
-void draw_tree(float x_coord, float z_coord) {
-    glTranslatef(x_coord,0,z_coord);
-    glColor3f(.588,.294,0);
-    glRectf(0,0,1,3);
-    glTranslatef(0.0,0,0.01);
-    glColor3f(0,.20,0);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(-1.3,1);
-    glVertex2f(2.3,1);
-    glVertex2f(.5,3);
-    glEnd();
-    glTranslatef(0.0,0,0.01);
-    glColor3f(0,.31,0);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(-1.1,2);
-    glVertex2f(2.1,2);
-    glVertex2f(.5,4);
-    glEnd();
-    glTranslatef(0.0,0,0.01);
-    glColor3f(0,.42,0);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(-1,3);
-    glVertex2f(2,3);
-    glVertex2f(.5,5);
-    glEnd();
-    glTranslatef(0.0,0,-0.03);
-    glTranslatef(-x_coord,0,-z_coord);
-
-}
-
 void draw_tree_3d(float x_coord, float z_coord) {
     glTranslatef(x_coord,0,z_coord);
     glRotatef(-90.0,1.0,0.0,0.0);
@@ -614,7 +584,7 @@ int main(int argc, char** argv) {
   
   
   
-  glutCreateWindow("Cube Test");
+  glutCreateWindow("Abduction");
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
   glutTimerFunc(100,timer,0);
