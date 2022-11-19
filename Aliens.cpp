@@ -1,4 +1,4 @@
-
+/* Code created by Sammie and Lucas for CST 310 */
 
 #ifdef __APPLE_CC__
 #include <GLUT/glut.h>
@@ -64,6 +64,7 @@ void init()
 }
 
 
+//Function to draw cubes based on quads
 void plot_rect(float xmax, float xmin, float ymax, float ymin, float zmax, float zmin, float colors[][3]) {
     glColor3f(colors[0][0], colors[0][1], colors[0][2]);
     glVertex3f(xmin,ymax,zmax);
@@ -108,6 +109,7 @@ float x_position =0.0;
 int state =1;
 
 
+//Function to draw Cylinders
 void draw_cylinder(GLfloat radius,
                    GLfloat height,
                    GLfloat R,
@@ -158,7 +160,7 @@ void draw_cylinder(GLfloat radius,
 
 
 
-
+//Function to draw a rectangle
 void draw_rect(float xmax, float xmin, float ymax, float ymin) {
   glBegin(GL_POLYGON);
     	glVertex3f(xmax,ymax,0.0);
@@ -169,72 +171,39 @@ void draw_rect(float xmax, float xmin, float ymax, float ymin) {
 	 glEnd();
 }
 
-
+//function to draw a car
 void drawCar()
 {
-
-
     glTranslatef(0,2,-2.0);
 
     glBegin(GL_QUADS);
      float colors[][3] = {{0.8,0.2353,0.1765}, {0.8,0.2353,0.1765}, {0.8,0.2353,0.1765},  	{0.8,0.2353,0.1765}, {0.8,0.2353,0.1765}, {0.8,0.2353,0.1765}};
-     
-     
-     
      //car body
     plot_rect(1.5,-0.5,0.5,0.0,0.5,-0.5, colors);
-    
     plot_rect(2.5,-1.5,0,-1,0.5,-0.5,colors);
-    
-    
-    
     glEnd();
-
-
-
 
     glTranslatef(-0.4,-1.0,0.2);
 
-
-	
     //left tire front
-    
     draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
-    
-    
     glTranslatef(0,0,-0.9);
-    
-    
-    //left tire back
-    
-    draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
-    
-    
-    
 
-    
-    
+    //left tire back
+    draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
     glTranslatef(1.5,0,0.9);
-   // glRotatef(90.0,0.0,0.0,1.0);
-    
-    
-    
     
     //Right tire front
     draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
-    
     glTranslatef(0,0,-0.9);
     
-    
     //Right tire back
-    
     draw_cylinder(0.4,0.5,0.34,0.27,0.20, true);
-
     glTranslatef(0,0,0.9);
-
     
 
 }
+
 
 void draw_tree_3d(float x_coord, float z_coord) {
     glTranslatef(x_coord,0,z_coord);
@@ -257,14 +226,11 @@ void draw_tree_3d(float x_coord, float z_coord) {
 
 }
 
+//Function to display objects 
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	
-	
-	
-	
 			// Set the camera centered at (x,y,1) and looking along directional
 	// vector (lx, ly, 0), with the z-axis pointing up
 	gluLookAt(
@@ -272,16 +238,11 @@ void display()
 			x + lx, y + ly, 2.0,
 			0.0,    0.0,    2.0);
 	
-	
-	
-	
-	
 	glTranslatef(2.0,0.0,-8.0);
 	glRotatef(90.0,1.0,0.0,0.0);
-
-    
 	glTranslatef(0.0,8.0,-23.0);
 
+	//Drawing trees
 	glTranslatef(0.0,-2,0);
 	draw_tree_3d(0,0);
     draw_tree_3d(-16,1.5);
@@ -292,10 +253,6 @@ void display()
     draw_tree_3d(20,4);
     draw_tree_3d(-16, 18);
     glTranslatef(0.0,2,0);
-	
-    
-    
-    
     
     glTranslatef(0.0,8.0,-4.0);
     glTranslatef(0,0,alienMove);
@@ -311,14 +268,9 @@ void display()
     glScalef(0.5,1.8,1.0);
     glTranslatef(0.0,-7.2,0.0);
     
-    
-    
     glTranslatef(0,0,-alienMove);
      glTranslatef(0,0,4);
     
-      
-    
-  //  glRotatef(-30.0,1.0,0.0,0.0);
     
     glBegin(GL_POLYGON);
     
@@ -341,134 +293,95 @@ void display()
     glVertex3f(-100.0,-1.0,-1.0);
     
     glEnd();
-	
-	
-	
+
 
    glTranslatef(-20.0,-1.4,10.0);
    
    
-   
+   //Drawing car and moving it
    glTranslatef(carMove, 0, 0);
-   
-    
    drawCar();
-   
-   //glTranslatef(-20, 0, 0);
-   
-   //drawCar();
-
-
     glTranslatef(-carMove, 0, 0);
-
-
-
-    
-
-
-
     glTranslatef(20,0.6,-2);
     
-     glBegin(GL_POLYGON);
-    
-    //Road
+    //Drawing Road
+    glBegin(GL_POLYGON);
     glColor3f(0.4, 0.4, 0.4);
     glVertex3f(-100.0,-1.0,4.0);
     glVertex3f(100.0,-1.0,-3.0);
     glVertex3f(100.0,-1.0,4.0);
     glVertex3f(-100.0,-1.0,-3.0);
-    
     glEnd();
 
-
-
-
-    //Drawing Second car
+    //Drawing Second car, moving it,  and checking to see if it should be visible 
     glTranslatef(-40, -1.5,4);
-    
     if(carVisible)
     {
     glTranslatef(carMove1, 0, 0);
     glTranslatef(0,carFloat,0);
     glRotatef(carRotate,0.0,0.0,1.0);
-    
     drawCar();
-    
-    
     glRotatef(-carRotate,0.0,0.0,1.0);
     glTranslatef(0,-carFloat,0);
     glTranslatef(-carMove1, 0, 0);
-    
-    
+
+    //Drawing and moving beam
     glTranslatef(37.5 + beam,0,-1.5);
-    
-    
-    //Draws alien green triangle
-  
     if(capture)
     {
-    
+    	//Drawing beam
     	glBegin(GL_TRIANGLES);
     	glColor3f(0.1, 0.6, 0.2);
     	glVertex3f(-6,-1,-0.5);
     	glVertex3f(0.5,8,-0.5);
     	glVertex3f(6,-1,-0.5);
-    	
-    	glEnd();
-    		
-    
+    	glEnd();	
     }
     
-    }
-  
-    
+    }    
     	glFlush();
 
 	glutSwapBuffers();
 }
 
-//increments the angle of rotation and redisplays window
+//Function to redisplay scene
 void timer(int v) {
 
+     //Checks to see if car has moved to certain point and draws beam if it has
      if(carMove1<40)
      {
-     carMove1+=1.95;
+     	carMove1+=1.95;
      }
      else
      {
-      capture = true;
-      beam += 0.5;
+      	capture = true;
+      	beam += 0.5;
       
       if(carFloat<4)
       {
-      carFloat+=1;
-      carRotate+=20;
+      	carFloat+=1;
+      	carRotate+=20;
       }
       else
       {
-      
-      carVisible = false;
-      
+      	carVisible = false;
       }
-      
-      
      }
      
-     
+     //Moves the space ship forward when the car is captured
      if(!carVisible)
      {
      	alienMove+=1;
      }
-     
-     
-     carMove+=1.95;
+    
+     	carMove+=1.95;
      
      if(alienMove<10)
      {
-     alienMove+=1;
+     	alienMove+=1;
      }
      
-     
+     //Resets the scene so that it loops
      if(alienMove>30)
      {
      	alienMove = 0;
@@ -480,23 +393,11 @@ void timer(int v) {
      	capture = false;
      	carVisible = true;
      }
-     
-     
-     
-     
-     
-     
      glutPostRedisplay();
-     
      glutTimerFunc(6000/FPS, timer, v);
-
-
-
 }
 
-
-
-
+//Updates the camera positions
 void update(void) 
 {
 	if (deltaMove) { // update camera position
@@ -506,12 +407,13 @@ void update(void)
 	glutPostRedisplay(); // redisplay everything
 }
 
-
+//Processes key
 void processNormalKeys(unsigned char key, int xx, int yy)
 {
 	if (key == ESC || key == 'q' || key == 'Q') exit(0);
 } 
 
+//Processes arrow keys to move
 void pressSpecialKey(int key, int xx, int yy)
 {
 	switch (key) {
@@ -520,6 +422,7 @@ void pressSpecialKey(int key, int xx, int yy)
 	}
 } 
 
+//proccess arrow key release to stop moving
 void releaseSpecialKey(int key, int x, int y) 
 {
 	switch (key) {
@@ -528,6 +431,7 @@ void releaseSpecialKey(int key, int x, int y)
 	}
 } 
 
+//processes mouse input to look around
 void mouseMove(int x, int y) 
 { 	
 	if (isDragging) { // only when dragging
@@ -540,6 +444,7 @@ void mouseMove(int x, int y)
 	}
 }
 
+//processes mouse input to look around
 void mouseButton(int button, int state, int x, int y) 
 {
 	if (button == GLUT_LEFT_BUTTON) {
@@ -554,7 +459,7 @@ void mouseButton(int button, int state, int x, int y)
 	}
 }
 
-
+//Function to reshape the window if resized
 void reshape(GLint w, GLint h)
 {
 	glViewport(0,0,w,h);
@@ -574,6 +479,7 @@ int main(int argc, char** argv) {
   
   glutInitWindowSize(1000, 1000);
   glutInitWindowPosition(100, 100);
+<<<<<<< HEAD
   
  
  
@@ -585,6 +491,9 @@ int main(int argc, char** argv) {
   
   
   glutCreateWindow("Abduction");
+=======
+  glutCreateWindow("Cube Test");
+>>>>>>> 1416a5de94d6cde71f8f06aa3b376450a54fe1ef
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
   glutTimerFunc(100,timer,0);
@@ -594,21 +503,9 @@ int main(int argc, char** argv) {
   glutMotionFunc(mouseMove); // process mouse dragging motion
   glutKeyboardFunc(processNormalKeys);
   glutSpecialFunc(pressSpecialKey); // process special key pressed
-						// Warning: Nonstandard function! Delete if desired.
-						
   glutSpecialUpFunc(releaseSpecialKey); // process special key release
-   
-  
-  //glutTimerFunc(0,timer,0);
-  
- 
-  
-  
   init();
   glutMainLoop();
- 
-// return 0; 
-  
-  
+
 }
 
