@@ -7,50 +7,13 @@
 #include <GL/glut.h>
 #include <cmath>
 
-static const GLfloat cube_vertex[] = {
-    -1.0f,-1.0f,-1.0f, // triangle 1 : begin
-    -1.0f,-1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f, // triangle 1 : end
-    1.0f, 1.0f,-1.0f, // triangle 2 : begin
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f, // triangle 2 : end
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f
-};
-
 // Colors
 GLfloat WHITE[] = {1, 1, 1};
 GLfloat RED[] = {1, 0, 0};
 GLfloat GREEN[] = {0, 1, 0};
 GLfloat MAGENTA[] = {1, 0, 1};
+GLfloat BLUE[] = {0, 0, 1};
+GLfloat YELLOW[] = {1, 1, 0};
 GLfloat xShift = 0;
 GLfloat yShift = 0;
 GLfloat zShift = 0;
@@ -94,7 +57,7 @@ public:
       y(h), x(x), z(z) {
   }
   void update() {
-    y = 1;
+    y = 1.1;
     if (y > maximumHeight) {
      // y = maximumHeight; direction = -1;
     } else if (y < radius) {
@@ -110,6 +73,61 @@ public:
 };
 
 
+class Cube {
+  GLfloat* color;
+  double maximumHeight;
+  double x;
+  double y;
+  double z;
+  int direction;
+  
+
+public:
+  Cube(GLfloat* c, double h, double x, double z):
+       color(c), maximumHeight(h), direction(-1),
+      y(h), x(x), z(z) {
+  }
+  void update() {
+    y = 1;
+    
+    glPushMatrix();
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+    glTranslated(x, 1, z);
+    glutSolidCube(2);
+    glPopMatrix();
+  }
+};
+
+
+class Cyl {
+  double radius;
+  GLfloat* color;
+  double maximumHeight;
+  double x;
+  double y;
+  double z;
+  int direction;
+  
+
+public:
+  Cyl(double r, GLfloat* c, double h, double x, double z):
+      radius(r), color(c), maximumHeight(h), direction(-1),
+      y(h), x(x), z(z) {
+  }
+  void update() {
+    y = 1;
+    
+    glPushMatrix();
+    GLUquadric *quad = gluNewQuadric();
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+    glTranslated(x, 2*y, z);
+    glRotated(90, 1,0,0);
+    gluCylinder(quad, radius, radius, 2*y, 30, 30);
+    gluDisk(quad, 0, 0, 30, radius);
+    gluDisk(quad, 0, y, 30, radius);
+    glPopMatrix();
+  }
+};
 
 // A checkerboard class.  A checkerboard has alternating red and white
 // squares.  The number of squares is set in the constructor.  Each square
@@ -156,9 +174,13 @@ public:
 Checkerboard checkerboard(8, 8);
 Camera camera;
 Ball balls[] = {
-  Ball(1, GREEN, 7, 6, 1),
-  Ball(1.5, MAGENTA, 6, 3, 4),
-  Ball(0.4, WHITE, 5, 1, 7)
+  Ball(1.1, GREEN, 8, 6, 3.5)
+};
+Cube cubes[] = {
+  Cube(BLUE,0, 3.6, 3.5)
+};
+Cyl cyls[] = {
+  Cyl(1, YELLOW, 70, 1.3,3.5)
 };
 
 
@@ -181,7 +203,7 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   //camera.getZ()
-  gluLookAt(4, camera.getY()-1, camera.getZ()-4,
+  gluLookAt(4, camera.getY()-2, camera.getZ()+12,
             checkerboard.centerx(), 0.0, checkerboard.centerz(),
             0.0, 1.0, 0.0);
   glTranslatef(xShift, yShift, zShift);
@@ -190,6 +212,12 @@ void display() {
   checkerboard.draw();
   for (int i = 0; i < sizeof balls / sizeof(Ball); i++) {
     balls[i].update();
+  }
+  for (int i = 0; i < sizeof cubes / sizeof(Cube); i++) {
+    cubes[i].update();
+  }
+  for (int i = 0; i < sizeof cyls / sizeof(Cyl); i++) {
+    cyls[i].update();
   }
   glFlush();
   glutSwapBuffers();
@@ -214,8 +242,8 @@ void timer(int v) {
 // display.
 void special(int key, int, int) {
   switch (key) {
-    case GLUT_KEY_LEFT: xShift -=1; break;
-    case GLUT_KEY_RIGHT: xShift+=1; break;
+    case GLUT_KEY_LEFT: xShift +=1; break;
+    case GLUT_KEY_RIGHT: xShift-=1; break;
     case GLUT_KEY_UP: yShift-=1; break;
     case GLUT_KEY_DOWN: yShift+=1; break;
   }
