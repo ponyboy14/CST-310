@@ -14,10 +14,15 @@ GLfloat GREEN[] = {0, 1, 0};
 GLfloat MAGENTA[] = {1, 0, 1};
 GLfloat BLUE[] = {0, 0, 1};
 GLfloat YELLOW[] = {1, 1, 0};
-GLfloat xShift = 0;
+GLfloat xShift = 1;
 GLfloat yShift = 0;
 GLfloat zShift = 0;
 GLfloat rot = 0;
+GLfloat yaw = 0;
+GLfloat pitch = 0;
+GLfloat roll = 0;
+bool control = false;
+bool shift = false;
 
 // A camera.  It moves horizontally in a circle centered at the origin of
 // radius 10.  It moves vertically straight up and down.
@@ -203,11 +208,13 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   //camera.getZ()
-  gluLookAt(4, camera.getY()-2, camera.getZ()+12,
+  gluLookAt(4+yaw, camera.getY()-2+pitch, camera.getZ()+15,
             checkerboard.centerx(), 0.0, checkerboard.centerz(),
             0.0, 1.0, 0.0);
-  glTranslatef(xShift, yShift, zShift);
+            
   glRotatef(rot, 0, 0, 1);
+  glTranslatef(xShift, yShift, zShift);
+  
  
   checkerboard.draw();
   for (int i = 0; i < sizeof balls / sizeof(Ball); i++) {
@@ -241,11 +248,21 @@ void timer(int v) {
 // Moves the camera according to the key pressed, then ask to refresh the
 // display.
 void special(int key, int, int) {
+
+  int mod_key = glutGetModifiers();
+  if(mod_key!= 0)
+     if(mod_key == GLUT_ACTIVE_CTRL)
+  {     control = true;
+     if(mod_key == GLUT_ACTIVE_SHIFT)
+     shift = true;
+  }
+
   switch (key) {
-    case GLUT_KEY_LEFT: xShift +=1; break;
-    case GLUT_KEY_RIGHT: xShift-=1; break;
-    case GLUT_KEY_UP: yShift-=1; break;
-    case GLUT_KEY_DOWN: yShift+=1; break;
+    case GLUT_KEY_LEFT:if(control){yaw-=2; control = false;} else{ xShift +=1;} break;
+    case GLUT_KEY_RIGHT: if(control){yaw+=2; control = false;} else{ xShift-=1;} break;
+    case GLUT_KEY_UP: if(control){ pitch+= 2; control = false;} else {yShift-=1;} break;
+    case GLUT_KEY_DOWN: if(control){ pitch-= 2; control = false;} else {yShift+=1;} break;
+    //case GLUT_ACTIVE_CTRL: yaw+=2; break;
   }
   glutPostRedisplay();
 }
@@ -254,10 +271,12 @@ void processNormalKeys(unsigned char key, int xx, int yy)
 {
 	const char Rrot = '<';
 	const char Lrot = '>';
+	const char reset = 'r';
 
 	switch (key) {
     case Rrot: rot+=2; break;
-    case Lrot: rot-=1; break;
+    case Lrot: rot-=2; break;
+    case reset: rot= 0; yShift =0; xShift =0; yaw = 0; pitch = 0; break;
     
   }
   glutPostRedisplay();
