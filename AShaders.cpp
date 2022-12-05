@@ -259,10 +259,10 @@ void special(int key, int, int) {
   }
 
   switch (key) {
-    case GLUT_KEY_LEFT:if(control){yaw-=2; control = false;}  else{ xShift +=1;} break;
-    case GLUT_KEY_RIGHT: if(control){yaw+=2; control = false;} else{ xShift-=1;} break;
-    case GLUT_KEY_UP: if(control){ pitch+= 2; control = false;} else if(shift){zShift+=1; shift=false;} else {yShift-=1;} break;
-    case GLUT_KEY_DOWN: if(control){ pitch-= 2; control = false;} else if(shift){zShift-=1; shift=false;} else {yShift+=1;} break;
+    case GLUT_KEY_LEFT:if(control){yaw-=2; control = false;}  else{ xShift -=1;} break;
+    case GLUT_KEY_RIGHT: if(control){yaw+=2; control = false;} else{ xShift+=1;} break;
+    case GLUT_KEY_UP: if(control){ pitch+= 2; control = false;} else if(shift){zShift+=1; shift=false;} else {yShift+=1;} break;
+    case GLUT_KEY_DOWN: if(control){ pitch-= 2; control = false;} else if(shift){zShift-=1; shift=false;} else {yShift-=1;} break;
     //case GLUT_ACTIVE_CTRL: yaw+=2; break;
   }
   glutPostRedisplay();
