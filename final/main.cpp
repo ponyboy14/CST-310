@@ -56,39 +56,43 @@ std::string getexepath()
   
 }
 
-class Checkerboard {
-  int displayListId;
-  int width;
-  int depth;
-public:
-  Checkerboard(int width, int depth): width(width), depth(depth) {}
-  double centerx() {return width / 2;}
-  double centerz() {return depth / 2;}
-  void create() {
-  
-    displayListId = glGenLists(1);
-    glNewList(displayListId, GL_COMPILE);
-    GLfloat lightPosition[] = {4, 3, 7, 1};
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-    glBegin(GL_QUADS);
-    glNormal3d(0, 0, 0);
-    for (int x = 0; x < width - 1; x++) {
-      for (int z = 0; z < depth - 1; z++) {
-        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE,
-                     (x + z) % 2 == 0 ? RED : WHITE);
-        glVertex3d(x, 0, z);
-        glVertex3d(x+1, 0, z);
-        glVertex3d(x+1, 0, z+1);
-        glVertex3d(x, 0, z+1);
-      }
-    }
-    glEnd();
-    glEndList();
-   // glRotatef(-25-180,0,1,0);
-  }
-  void draw() {
-    glCallList(displayListId);
-  }
+static const GLfloat g_vertex_buffer_data[] = {
+    -1.0f,-1.0f,-1.0f, // triangle 1 : begin
+    -1.0f,-1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f, // triangle 1 : end
+    1.0f, 1.0f,-1.0f, // triangle 2 : begin
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f, // triangle 2 : end
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f
 };
 
 
@@ -134,15 +138,15 @@ int main()
     // build and compile shaders
     // -------------------------
     Shader ourShader("1.model_loading.vs", "1.model_loading.fs");
+    
 
     // load models
     // -----------
-    Model sphere(getexepath() + "sphere.obj");
-    Model cyl(getexepath() + "cyl.obj");
-    Model cube(getexepath() + "cube.obj");
     Model checker(getexepath() + "checkerboard.obj");
-    Checkerboard checkerboard(8, 8);
-    checkerboard.create();
+    Model sphere(getexepath() + "sphere.obj");
+    
+    Model cube(getexepath() + "cube.obj");
+    Model cyl(getexepath() + "cyl.obj");
     bool first = true;
     
 
@@ -195,7 +199,10 @@ int main()
       
         
         model = glm::rotate(model, 3.14f, glm::vec3(0.0f, 0.0f, 1.0f));
-        model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::translate(model, glm::vec3(0.0f,1.2f,0.0f));
+        ourShader.setMat4("model", model);
+        checker.Draw(ourShader);
+        model = glm::translate(model, glm::vec3(3.0f, -1.2f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
         sphere.Draw(ourShader);
@@ -208,12 +215,8 @@ int main()
       
      
            
-        model = glm::translate(model, glm::vec3(0.0f,1.0f,0.0f));
-        ourShader.setMat4("model", model);
-        checker.Draw(ourShader);
         
         
-       // checkerboard.draw();
 
 
 
@@ -261,7 +264,7 @@ void processInput(GLFWwindow *window)
     }
     else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         if(ctrl)
-            camera.pitch(-2);
+            camera.pitch(2);
         else if(shift)
             camera.ProcessKeyboard(FORWARD, deltaTime);
         else
@@ -269,7 +272,7 @@ void processInput(GLFWwindow *window)
     }
     else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
         if(ctrl)
-            camera.pitch(2);
+            camera.pitch(-2);
         else if(shift)
             camera.ProcessKeyboard(BACKWARD, deltaTime);
         else
