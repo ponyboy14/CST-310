@@ -140,6 +140,7 @@ int main()
     Model sphere(getexepath() + "sphere.obj");
     Model cyl(getexepath() + "cyl.obj");
     Model cube(getexepath() + "cube.obj");
+    Model checker(getexepath() + "checkerboard.obj");
     Checkerboard checkerboard(8, 8);
     checkerboard.create();
     bool first = true;
@@ -181,11 +182,18 @@ int main()
             first = false;
         }
         
+       
+        
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
         // render the loaded model
+        
+        
         glm::mat4 model = glm::mat4(1.0f);
+        
+      
+        
         model = glm::rotate(model, 3.14f, glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
@@ -197,7 +205,15 @@ int main()
         model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
         ourShader.setMat4("model", model);
         cube.Draw(ourShader);
-        checkerboard.draw();
+      
+     
+           
+        model = glm::translate(model, glm::vec3(0.0f,1.0f,0.0f));
+        ourShader.setMat4("model", model);
+        checker.Draw(ourShader);
+        
+        
+       // checkerboard.draw();
 
 
 
