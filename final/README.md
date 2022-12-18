@@ -28,7 +28,7 @@ Once those libraries are installed, in the terminal you will compile the program
     g++ main.cpp glad.c khrplatform.h stb_image.h -o run -lGL -lglfw -lassimp -lGLU -lglut
 
 After the program is compiled, you can run it with the following command:
-    ./shaders
+    ./run
 
 Once the program is running, you will move the camera with the following method:
     Right Arrow:			Slide camera 1 unit in the positive X direction 

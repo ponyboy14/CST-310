@@ -11,6 +11,15 @@
 #include <GL/glut.h>
 
 #include <iostream>
+#include <stdio.h>  /* defines FILENAME_MAX */
+#ifdef WINDOWS
+    #include <string>
+    #include <windows.h>
+#else
+    #include <unistd.h>
+    #include <string>
+    #include <limits.h>
+ #endif
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -31,6 +40,21 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+std::string getexepath()
+{
+  #ifdef WINDOWS
+    char result[ MAX_PATH ];
+    std::string out = std::string( result, GetModuleFileName( NULL, result, MAX_PATH ) );
+    return out.substr(0, out.find_last_of("\\")+1);
+  #else
+    char result[ PATH_MAX ];
+    ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
+    std::string out = std::string( result, (count > 0) ? count : 0 );
+    return out.substr(0, out.find_last_of("/")+1);
+  #endif
+  
+}
 
 class Checkerboard {
   int displayListId;
@@ -67,8 +91,10 @@ public:
   }
 };
 
+
+
 int main()
-{
+{   
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -111,9 +137,9 @@ int main()
 
     // load models
     // -----------
-    Model sphere("/home/lucas/backpack/sphere.obj");
-    Model cyl("/home/lucas/backpack/cyl.obj");
-    Model cube("/home/lucas/backpack/cube.obj");
+    Model sphere(getexepath() + "sphere.obj");
+    Model cyl(getexepath() + "cyl.obj");
+    Model cube(getexepath() + "cube.obj");
     Checkerboard checkerboard(8, 8);
     checkerboard.create();
     bool first = true;
