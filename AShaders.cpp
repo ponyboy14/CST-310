@@ -6,6 +6,28 @@
 
 #include <GL/glut.h>
 #include <cmath>
+#include "stb_image.h"
+
+GLuint texture;
+
+GLuint glInitTexture(char* filename)
+{
+    GLuint t = 0;
+    int width, height, nrChannels;
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    unsigned char* data = stbi_load(filename, &width, &height, &nrChannels, 0);
+
+    glGenTextures(1, &t);
+    glBindTexture(GL_TEXTURE_2D, t);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    //unsigned char data[] = { 255, 0, 0, 255 };
+    if (data)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    return t;
+}
 
 // Colors
 GLfloat WHITE[] = {1, 1, 1};
@@ -70,9 +92,16 @@ public:
     }
     
     glPushMatrix();
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
-    glTranslated(x, y, z);
-    glutSolidSphere(radius, 30, 30);
+    char fn[] = "Bump-Map.jpg";
+    texture = glInitTexture(fn);
+    glEnable(GL_TEXTURE_2D);
+
+    GLUquadric *qobj = gluNewQuadric();
+    gluQuadricTexture(qobj, GL_TRUE);
+    gluSphere(qobj, radius, 20, 20);
+    gluDeleteQuadric(qobj);
+
+    glDisable(GL_TEXTURE_2D);
     glPopMatrix();
   }
 };
